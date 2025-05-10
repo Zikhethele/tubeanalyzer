@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YouTube Channel Analyzer</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #e1d8d8;
+      color: #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    h2, h3 {
+      color: #f0f0f0;
+    }
+
+    input, button {
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    input {
+      background-color: #444;
+      color: #fff;
+      border: 1px solid #555;
+    }
+
+    button {
+      background-color: #5c6bc0;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #3f51b5;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ff60;
+      padding: 1rem;
+      overflow-x: auto;
+      max-width: 90vw;
+      border-radius: 6px;
+    }
+
+    #spinner {
+      display: none;
+      margin: 1rem;
+    }
+
+    #container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    img.spinner {
+      width: 48px;
+      height: 48px;
+    }
+  </style>
+</head>
+<body>
+  <h2>YouTube Channel Analyzer</h2>
+
+  <div id="container">
+    <input type="text" id="channel" placeholder="e.g., censored-ish"/>
+    <input type="email" id="email" placeholder="e.g., analyzer@gmail.com"/>
+    <button onclick="fetchData()">Analyze Channel</button>
+    <div id="spinner">
+      <img src="https://i.imgur.com/llF5iyg.gif" alt="Loading..." class="spinner"/>
+    </div>
+    <h3>Response:</h3>
+    <pre id="output">Waiting for input...</pre>
+  </div>
+
+  <script>
+    async function fetchData() {
+      const channel = document.getElementById('channel').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const output = document.getElementById('output');
+      const spinner = document.getElementById('spinner');
+
+      if (!channel || !email) {
+        output.textContent = "Please enter both channel name and email.";
+        return;
+      }
+
+      const url = `https://tube-analyzer.onrender.com/channel-info?channel_name=${encodeURIComponent(channel)}&emails=${encodeURIComponent(email)}`;
+      output.textContent = "";
+      spinner.style.display = "block";
+
+      try {
+        const res = await fetch(url, { headers: { "accept": "application/json" } });
+        const json = await res.json();
+        output.textContent = JSON.stringify(json, null, 2);
+      } catch (err) {
+        output.textContent = `Error: ${err.message}`;
+      } finally {
+        spinner.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
