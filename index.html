@@ -7,16 +7,17 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #171616ba;
-      color: #e0e0e0;
+      background-color: #ffffff;
+      color: #333;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 2rem;
+      min-height: 100vh;
     }
 
     h2, h3 {
-      color: #f0f0f0;
+      color: #222;
     }
 
     input, button {
@@ -24,22 +25,29 @@
       margin: 0.5rem 0;
       width: 100%;
       max-width: 400px;
-      border-radius: 6px;
-      border: none;
+      border-radius: 8px;
       font-size: 1rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease-in-out;
     }
 
     input {
-      background-color: #444;
-      color: #fff;
-      border: 1px solid #555;
+      background-color: #f9f9f9;
+      color: #333;
+      border: 1px solid #ccc;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #0077ff;
+      box-shadow: 0 0 0 3px rgba(0, 119, 255, 0.2);
     }
 
     button {
-      background-color: #9698a0;
+      background-color: #222;
       color: #fff;
+      border: none;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
 
     button:hover {
@@ -47,12 +55,13 @@
     }
 
     pre {
-      background: #1e1e1e;
-      color: #a8ff60;
+      background: #f4f4f4;
+      color: #222;
       padding: 1rem;
       overflow-x: auto;
       max-width: 90vw;
-      border-radius: 6px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
     }
 
     #spinner {
