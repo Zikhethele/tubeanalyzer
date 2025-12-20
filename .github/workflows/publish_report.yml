@@ -1,0 +1,30 @@
+name: Publish YouTube Report
+
+on:
+  repository_dispatch:
+    types: [publish-report]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Create report directory
+        run: |
+          mkdir -p reports/${{ github.event.client_payload.channel_name }}
+
+      - name: Download dashboard HTML
+        run: |
+          curl -fSL "${{ github.event.client_payload.dashboard_url }}" \
+            -o reports/${{ github.event.client_payload.channel_name }}/youtube_dashboard.html
+
+      - name: Commit and push
+        run: |
+          git config user.name "TubeAnalyzer Bot"
+          git config user.email "bot@tubeanalyzer.local"
+          git add reports/
+          git commit -m "Publish report for ${{ github.event.client_payload.channel_name }}" || exit 0
+          git push
