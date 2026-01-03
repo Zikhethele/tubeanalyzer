@@ -16,10 +16,32 @@ jobs:
         run: |
           mkdir -p reports/${{ github.event.client_payload.channel_name }}
 
-      - name: Download dashboard HTML
+      - name: Validate payload
         run: |
-          curl -fSL "${{ github.event.client_payload.dashboard_url }}" \
-            -o reports/${{ github.event.client_payload.channel_name }}/youtube_dashboard.html
+          if [ -z "${{ github.event.client_payload.content_b64 }}" ]; then
+            echo "❌ Missing Base64 payload"
+            exit 1
+          fi
+          
+      - name: Decode and write HTML
+        run: |
+          echo "${{ github.event.client_payload.content_b64 }}" \
+            | base64 --decode > index.html
+            
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+      - name: Commit changes (if any)
+        run: |
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "ℹ️ No changes detected. Skipping commit."
+            exit 0
+          fi
+          git commit -m "Automated report deploy"
+          git push
 
       - name: Commit and push
         run: |
