@@ -25,8 +25,10 @@ jobs:
           
       - name: Decode and write HTML
         run: |
+          REPORT_DIR="reports/${{ github.event.client_payload.channel_name }}"
           echo "${{ github.event.client_payload.content_b64 }}" \
-            | base64 --decode > index.html
+            | base64 --decode > "$REPORT_DIR/index.html"
+
           
       - name: Commit and push
         run: |
