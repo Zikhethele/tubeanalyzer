@@ -2,19 +2,19 @@
 
 // require_once __DIR__ . '/../models/User.php';
 // require_once __DIR__ . '/../models/Analysis.php';
-// require_once __DIR__ . '/../services/AnalyzerService.php';
-// require_once __DIR__ . '/../services/EmailService.php';
-// require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../models/AnalyzerService.php';
+require_once __DIR__ . '/../services/EmailService.php';
+require_once __DIR__ . '/../config/Config.php';
 
 class AnalyzeController {
-    private $userModel;
-    private $analysisModel;
-    private $analyzerService;
+    // private $userModel;
+    //private $analysisModel;
+     private $analyzerService;
     private $emailService;
     
     public function __construct() {
-        $this->userModel = new User();
-        $this->analysisModel = new Analysis();
+        // $this->userModel = new User();
+        // $this->analysisModel = new Analysis();
         $this->analyzerService = new AnalyzerService();
         $this->emailService = new EmailService();
     }
@@ -48,19 +48,19 @@ class AnalyzeController {
             // }
             
             // Call API
-            // $data = $this->analyzerService->analyzeChannel($channelName, $email);
-            
+            $data = $this->analyzerService->analyzeChannel($channelName, $email);
+            // file_put_contents('analyze_log.txt', print_r($data, true), FILE_APPEND);
             // Save analysis
             // $analysisId = $this->analysisModel->createAnalysis($userId, $channelName, $data);
             
             // Send email (async in production)
-            // $this->emailService->sendAnalysisReport($email, $channelName, $data);
+            $this->emailService->sendAnalysisReport($email, $channelName, $data);
             
             return [
                 'success' => true,
-                'message' => 'Analysis complete! Check your email for the full report.'
-                // 'data' => $data,
-                // 'analysisId' => $analysisId
+                'message' => 'Analysis complete! Check your email for the full report.',
+                'data' => $data,
+                'analysisId' => $analysisId
             ];
             
         } catch (Exception $e) {

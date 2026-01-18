@@ -20,7 +20,7 @@ class Config {
     
     // Site Configuration
     const SITE_NAME = 'TubeAnalyzer';
-    const SITE_URL = 'https://tubeanalyzer.co.za';
+    const SITE_URL = 'http://tubeanalyzer.co.za';
     const SUPPORT_EMAIL = 'support@tubeanalyzer.co.za';
     
     // Rate Limiting

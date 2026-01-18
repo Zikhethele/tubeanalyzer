@@ -11,9 +11,10 @@ header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
 
 // ini_set('display_errors', 0);
-ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/../logs/errors.log');
 // error_reporting(0);
+// ini_set('log_errors', 1);
+// ini_set('error_log', __DIR__ . '/errors.log');
+
 
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -52,17 +53,16 @@ try {
     // $controller = new AnalyzeController();
     // $result = $controller->analyze($channelName, $email);
 
-
-    // echo json_encode([
-    //     'success' => 'success' ?? false,
-    //     'message' => 'message' ?? 'Request completed'
-    // ]);
+    echo json_encode([
+        'success' => 'success' ?? false,
+        'message' => 'message' ?? 'Request completed'
+    ]);
 
     // Enforce JSON shape
-    echo json_encode([
-        'success' => $result['success'] ?? false,
-        'message' => $result['message'] ?? 'Request completed'
-    ]);
+    // echo json_encode([
+    //     'success' => $result['success'] ?? false,
+    //     'message' => $result['message'] ?? 'Request completed'
+    // ]);
 
 } catch (Throwable $e) {
     error_log(
