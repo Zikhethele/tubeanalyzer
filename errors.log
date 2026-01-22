@@ -1,0 +1,12 @@
+[22-Jan-2026 16:09:41 UTC] Class "Database" not found | /Users/zikhethelegumede/Sites/TubeAnalyzer/models/Analysis.php:8
+[22-Jan-2026 16:13:01 UTC] Class "Database" not found | /Users/zikhethelegumede/Sites/TubeAnalyzer/models/Analysis.php:8
+[22-Jan-2026 16:13:01 UTC] Class "Database" not found | /Users/zikhethelegumede/Sites/TubeAnalyzer/models/Analysis.php:8
+[22-Jan-2026 16:13:12 UTC] Class "Database" not found | /Users/zikhethelegumede/Sites/TubeAnalyzer/models/Analysis.php:8
+[22-Jan-2026 16:16:56 UTC] Class "Database" not found | /Users/zikhethelegumede/Sites/TubeAnalyzer/models/Analysis.php:8
+[22-Jan-2026 16:17:13 UTC] Class "Database" not found | /Users/zikhethelegumede/Sites/TubeAnalyzer/models/Analysis.php:8
+[22-Jan-2026 16:17:32 UTC] Class "Database" not found | /Users/zikhethelegumede/Sites/TubeAnalyzer/models/Analysis.php:8
+[22-Jan-2026 17:01:30 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /Users/zikhethelegumede/Sites/TubeAnalyzer/models/AnalyzerService.php on line 18
+[22-Jan-2026 17:05:27 UTC] PHP Warning:  Undefined variable $httpCode in /Users/zikhethelegumede/Sites/TubeAnalyzer/models/AnalyzerService.php on line 22
+[22-Jan-2026 17:05:27 UTC] PHP Warning:  Undefined variable $httpCode in /Users/zikhethelegumede/Sites/TubeAnalyzer/models/AnalyzerService.php on line 23
+[22-Jan-2026 17:06:40 UTC] PHP Warning:  Undefined variable $response in /Users/zikhethelegumede/Sites/TubeAnalyzer/models/AnalyzerService.php on line 32
+[22-Jan-2026 17:06:40 UTC] PHP Deprecated:  json_decode(): Passing null to parameter #1 ($json) of type string is deprecated in /Users/zikhethelegumede/Sites/TubeAnalyzer/models/AnalyzerService.php on line 32

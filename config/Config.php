@@ -12,8 +12,8 @@ class Config {
     // Database Configuration
     const DB_HOST = 'localhost';
     const DB_NAME = 'tubeanm7u9e5_tubeanalyz';
-    const DB_USER = 'tubeanm7u9e5_tubeapp';
-    const DB_PASS = ',$AETMD69B~}j{{P';
+    const DB_USER = 'tubeanm7u9e5_tubeapp'; //
+    const DB_PASS = ',$AETMD69B~}j{{P';//
     
     // API Configuration
     const API_BASE_URL = 'https://tube-analyzer.onrender.com';

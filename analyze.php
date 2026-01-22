@@ -12,8 +12,8 @@ header('X-Content-Type-Options: nosniff');
 
 // ini_set('display_errors', 0);
 // error_reporting(0);
-// ini_set('log_errors', 1);
-// ini_set('error_log', __DIR__ . '/errors.log');
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/errors.log');
 
 
 
@@ -50,19 +50,14 @@ try {
         exit;
     }
 
-    // $controller = new AnalyzeController();
-    // $result = $controller->analyze($channelName, $email);
-
-    echo json_encode([
-        'success' => 'success' ?? false,
-        'message' => 'message' ?? 'Request completed'
-    ]);
+    $controller = new AnalyzeController();
+    $result = $controller->analyze($channelName, $email);
 
     // Enforce JSON shape
-    // echo json_encode([
-    //     'success' => $result['success'] ?? false,
-    //     'message' => $result['message'] ?? 'Request completed'
-    // ]);
+    echo json_encode([
+        'success' => $result['success'] ?? false,
+        'message' => $result['message'] ?? 'Request completed'
+    ]);
 
 } catch (Throwable $e) {
     error_log(
