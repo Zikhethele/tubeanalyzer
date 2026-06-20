@@ -3,34 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Channel Analyzer — TubeAnalyzer</title>
+    <title>TubeAnalyzer — Free YouTube Channel Analytics</title>
 
-    <meta name="description" content="Analyze any YouTube channel instantly. Get subscriber counts, video stats, engagement metrics, and growth insights. Free YouTube analytics tool for creators and marketers.">
-    <meta name="keywords" content="youtube analytics, channel analyzer, youtube stats, social media analytics, influencer metrics, youtube insights">
+    <meta name="description" content="Analyze any YouTube channel for free. Get subscriber counts, view trends, engagement rates, and video performance — delivered as an interactive report to your inbox. No account needed.">
+    <meta name="keywords" content="youtube analytics, youtube channel analyzer, free youtube stats, channel analytics, youtube engagement rate, subscriber tracker, youtube insights tool">
     <meta name="author" content="TubeAnalyzer">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://yessherlock.com">
+    <meta name="theme-color" content="#111111">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
 
-    <meta property="og:title" content="YouTube Channel Analyzer — TubeAnalyzer">
-    <meta property="og:description" content="Get instant insights on any YouTube channel — subscribers, views, engagement rates, and more.">
-    <meta property="og:image" content="https://yessherlock.com/assets/og-image.jpg">
+    <meta property="og:title" content="TubeAnalyzer — Free YouTube Channel Analytics">
+    <meta property="og:description" content="Get instant insights on any YouTube channel — subscribers, views, engagement rates, and growth trends, delivered to your inbox.">
     <meta property="og:url" content="https://yessherlock.com">
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TubeAnalyzer">
 
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="YouTube Channel Analyzer">
-    <meta name="twitter:description" content="Analyze any YouTube channel instantly with our free tool.">
-    <meta name="twitter:image" content="https://yessherlock.com/assets/twitter-card.jpg">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="TubeAnalyzer — Free YouTube Channel Analytics">
+    <meta name="twitter:description" content="Analyze any YouTube channel for free. Interactive reports delivered to your inbox.">
 
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "YouTube Channel Analyzer",
-      "description": "Free tool to analyze YouTube channel statistics and metrics",
+      "name": "TubeAnalyzer",
+      "description": "Free tool to analyze YouTube channel statistics including subscribers, views, engagement rates, and growth trends",
       "url": "https://yessherlock.com",
       "applicationCategory": "AnalyticsApplication",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "featureList": [
+        "Subscriber count tracking",
+        "View trend analysis",
+        "Engagement rate calculation",
+        "Video performance metrics",
+        "Interactive HTML reports delivered by email"
+      ]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I analyze a YouTube channel?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Enter any YouTube channel name and your email address. TubeAnalyzer fetches the channel's public statistics and sends you an interactive analytics report within a few minutes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is TubeAnalyzer free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, completely free. No account or credit card required — just enter a channel name and your email."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What YouTube metrics does TubeAnalyzer track?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "TubeAnalyzer tracks subscriber counts, total views, individual video performance, engagement rates, upload frequency, and growth trends over time."
+          }
+        }
+      ]
     }
     </script>
 
@@ -48,6 +90,7 @@
             --error-bg:       #fef2f2;
             --error-border:   #fecaca;
             --error-text:     #991b1b;
+            --max-w:          1100px;
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -59,16 +102,24 @@
             min-height: 100vh;
             font-size: 1rem;
             line-height: 1.6;
+            display: flex;
+            flex-direction: column;
         }
 
         /* ── Nav ── */
         .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 24px 48px;
             background: var(--white);
             border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 48px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .nav-wordmark {
@@ -85,20 +136,28 @@
             background: none;
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 8px 16px;
+            padding: 7px 16px;
             cursor: pointer;
             transition: border-color 0.15s;
             min-height: 36px;
         }
 
-        .btn-nav:hover { border-color: var(--black); }
+        .btn-nav:hover        { border-color: var(--black); }
         .btn-nav:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
 
         /* ── Main ── */
         main {
-            max-width: 520px;
+            flex: 1;
+            max-width: var(--max-w);
             margin: 0 auto;
-            padding: 96px 24px 96px;
+            padding: 80px 48px 96px;
+            width: 100%;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            max-width: 600px;
+            margin-bottom: 48px;
         }
 
         .eyebrow {
@@ -107,26 +166,61 @@
             letter-spacing: 0.06em;
             text-transform: uppercase;
             color: var(--muted);
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         h1 {
-            font-size: 2.25rem;
+            font-size: 2.5rem;
             font-weight: 600;
-            line-height: 1.2;
-            letter-spacing: -0.02em;
-            margin-bottom: 16px;
+            line-height: 1.15;
+            letter-spacing: -0.025em;
+            margin-bottom: 20px;
         }
 
         .subtitle {
-            font-size: 1rem;
+            font-size: 1.0625rem;
             color: var(--muted);
-            max-width: 46ch;
-            margin-bottom: 48px;
+            max-width: 50ch;
+            line-height: 1.65;
         }
 
+        /* ── Form section ── */
+        .form-section {
+            max-width: 480px;
+        }
+
+        /* ── Example chips ── */
+        .examples {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .examples-label {
+            font-size: 0.8125rem;
+            color: var(--muted);
+        }
+
+        .chip {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--black);
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 4px 12px;
+            cursor: pointer;
+            transition: border-color 0.12s;
+            line-height: 1.6;
+        }
+
+        .chip:hover        { border-color: var(--black); }
+        .chip:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
+
         /* ── Form ── */
-        .form-group { margin-bottom: 16px; }
+        .form-group { margin-bottom: 14px; }
 
         label {
             display: block;
@@ -157,7 +251,7 @@
             display: block;
             width: 100%;
             padding: 11px 16px;
-            margin-top: 24px;
+            margin-top: 20px;
             font-size: 0.9375rem;
             font-weight: 500;
             color: var(--white);
@@ -173,12 +267,19 @@
         .btn-primary:focus-visible         { outline: 2px solid var(--black); outline-offset: 2px; }
         .btn-primary:disabled              { opacity: 0.45; cursor: not-allowed; }
 
+        .form-hint {
+            margin-top: 12px;
+            font-size: 0.8125rem;
+            color: var(--muted);
+            text-align: center;
+        }
+
         /* ── Spinner ── */
         .spinner {
             display: none;
             align-items: center;
             gap: 12px;
-            margin-top: 24px;
+            margin-top: 20px;
             font-size: 0.875rem;
             color: var(--muted);
         }
@@ -198,7 +299,7 @@
         /* ── Result ── */
         .result {
             display: none;
-            margin-top: 24px;
+            margin-top: 16px;
             padding: 14px 16px;
             border-radius: var(--radius);
             font-size: 0.9375rem;
@@ -217,6 +318,28 @@
             color: var(--error-text);
         }
 
+        /* ── Footer ── */
+        footer {
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 20px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8125rem;
+            color: var(--muted);
+        }
+
+        .footer-inner a {
+            color: var(--muted);
+            text-decoration: none;
+        }
+
+        .footer-inner a:hover { color: var(--black); }
 
         /* ── Modal ── */
         .modal-overlay {
@@ -262,8 +385,8 @@
             justify-content: center;
         }
 
-        .modal-close:hover        { color: var(--black); }
-        .modal-close:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
+        .modal-close:hover         { color: var(--black); }
+        .modal-close:focus-visible  { outline: 2px solid var(--black); outline-offset: 2px; }
 
         .modal h2 {
             font-size: 1.25rem;
@@ -316,44 +439,68 @@
 
         /* ── Responsive ── */
         @media (max-width: 640px) {
-            .nav  { padding: 16px 24px; }
-            main  { padding: 64px 24px 64px; }
-            h1    { font-size: 1.75rem; }
+            .nav-inner,
+            .footer-inner { padding-left: 24px; padding-right: 24px; }
+            main  { padding: 56px 24px 64px; }
+            h1    { font-size: 1.875rem; }
+            .hero { margin-bottom: 36px; }
         }
     </style>
 </head>
 <body>
 
-<nav class="nav">
-    <span class="nav-wordmark">TubeAnalyzer</span>
-    <button class="btn-nav" id="openSignUp">Sign up</button>
+<nav class="nav" role="banner">
+    <div class="nav-inner">
+        <span class="nav-wordmark">TubeAnalyzer</span>
+        <button class="btn-nav" id="openSignUp">Sign up</button>
+    </div>
 </nav>
 
 <main>
-    <p class="eyebrow">Free YouTube analytics</p>
-    <h1>Analyze any YouTube<br>channel in seconds.</h1>
-    <p class="subtitle">Enter a channel name and your email. We'll send you a detailed report on subscribers, views, engagement, and growth.</p>
-
-    <form id="analyzeForm" method="POST" action="analyze.php" novalidate>
-        <div class="form-group">
-            <label for="channel">Channel name</label>
-            <input type="text" id="channel" name="channel" placeholder="e.g. MrBeast" required autocomplete="off">
-        </div>
-        <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" id="email" name="email" placeholder="you@example.com" required>
-        </div>
-        <button type="submit" class="btn-primary" id="submitBtn">Analyze channel</button>
-    </form>
-
-    <div class="spinner" id="spinner">
-        <div class="spinner-ring"></div>
-        <span>Analyzing channel&hellip;</span>
+    <div class="hero">
+        <p class="eyebrow">Free YouTube analytics</p>
+        <h1>Analyze any YouTube<br>channel in seconds.</h1>
+        <p class="subtitle">Subscribers, video performance, engagement rates, and growth trends — delivered as an interactive report to your inbox.</p>
     </div>
 
-    <div class="result" id="result"></div>
+    <div class="form-section">
+        <div class="examples" aria-label="Example channels">
+            <span class="examples-label">Try:</span>
+            <button class="chip" type="button" data-channel="MrBeast">MrBeast</button>
+            <button class="chip" type="button" data-channel="MKBHD">MKBHD</button>
+            <button class="chip" type="button" data-channel="Veritasium">Veritasium</button>
+            <button class="chip" type="button" data-channel="Kurzgesagt">Kurzgesagt</button>
+        </div>
 
+        <form id="analyzeForm" method="POST" action="analyze.php" novalidate>
+            <div class="form-group">
+                <label for="channel">Channel name</label>
+                <input type="text" id="channel" name="channel" placeholder="e.g. MrBeast" required autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            </div>
+            <button type="submit" class="btn-primary" id="submitBtn">Analyze channel</button>
+        </form>
+
+        <p class="form-hint">Free &middot; No account needed &middot; Report arrives in a few minutes</p>
+
+        <div class="spinner" id="spinner">
+            <div class="spinner-ring"></div>
+            <span>Queuing your analysis&hellip;</span>
+        </div>
+
+        <div class="result" id="result" role="status"></div>
+    </div>
 </main>
+
+<footer>
+    <div class="footer-inner">
+        <span>&copy; 2026 TubeAnalyzer</span>
+        <a href="mailto:support@yessherlock.com">support@yessherlock.com</a>
+    </div>
+</footer>
 
 <!-- Sign up modal -->
 <div class="modal-overlay" id="signUpModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -392,6 +539,14 @@
 </div>
 
 <script>
+    // ── Example channel chips ──
+    document.querySelectorAll('.chip').forEach(function(chip) {
+        chip.addEventListener('click', function() {
+            document.getElementById('channel').value = this.dataset.channel;
+            document.getElementById('channel').focus();
+        });
+    });
+
     // ── Analyze form ──
     document.getElementById('analyzeForm').addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -410,9 +565,9 @@
             result.style.display = 'block';
             if (data.success) {
                 result.className = 'result success';
-                result.innerHTML = '<strong>Report on its way.</strong> ' + data.message;
+                result.textContent = data.message;
             } else {
-                result.className = 'result error';
+                result.className   = 'result error';
                 result.textContent = data.message;
             }
         } catch {
@@ -459,7 +614,7 @@
             const data     = await response.json();
             regResult.style.display = 'block';
             if (data.success) {
-                regResult.className = 'modal-result success';
+                regResult.className   = 'modal-result success';
                 regResult.textContent = data.message;
                 regForm.reset();
             } else {
