@@ -3,29 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free YouTube Channel Analyzer | Detailed Analytics & Insights - TubeAnalyzer</title>
-    
-    <!-- SEO Meta Tags -->
+    <title>YouTube Channel Analyzer — TubeAnalyzer</title>
+
     <meta name="description" content="Analyze any YouTube channel instantly. Get subscriber counts, video stats, engagement metrics, and growth insights. Free YouTube analytics tool for creators and marketers.">
     <meta name="keywords" content="youtube analytics, channel analyzer, youtube stats, social media analytics, influencer metrics, youtube insights">
     <meta name="author" content="TubeAnalyzer">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://yessherlock.com">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="YouTube Channel Analyzer - Free Analytics Tool">
-    <meta property="og:description" content="Get instant insights on any YouTube channel - subscribers, views, engagement rates, and more.">
+
+    <meta property="og:title" content="YouTube Channel Analyzer — TubeAnalyzer">
+    <meta property="og:description" content="Get instant insights on any YouTube channel — subscribers, views, engagement rates, and more.">
     <meta property="og:image" content="https://yessherlock.com/assets/og-image.jpg">
     <meta property="og:url" content="https://yessherlock.com">
     <meta property="og:type" content="website">
-    
-    <!-- Twitter Card -->
+
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="YouTube Channel Analyzer">
     <meta name="twitter:description" content="Analyze any YouTube channel instantly with our free tool.">
     <meta name="twitter:image" content="https://yessherlock.com/assets/twitter-card.jpg">
-    
-    <!-- Structured Data -->
+
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -34,575 +30,520 @@
       "description": "Free tool to analyze YouTube channel statistics and metrics",
       "url": "https://yessherlock.com",
       "applicationCategory": "AnalyticsApplication",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "reviewCount": "1247"
-      }
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
     }
     </script>
-    
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        :root {
+            --black:          #111;
+            --muted:          #6b7280;
+            --border:         #e5e7eb;
+            --bg:             #fafafa;
+            --white:          #fff;
+            --radius:         6px;
+            --success-bg:     #f0fdf4;
+            --success-border: #bbf7d0;
+            --success-text:   #166534;
+            --error-bg:       #fef2f2;
+            --error-border:   #fecaca;
+            --error-text:     #991b1b;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--black);
             min-height: 100vh;
-        }
-        
-        .hero {
-            text-align: center;
-            padding: 4rem 2rem 2rem;
-            color: white;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            animation: fadeInDown 0.8s ease;
-        }
-        
-        .hero p {
-            font-size: 1.3rem;
-            opacity: 0.95;
-            margin-bottom: 2rem;
-            animation: fadeInUp 0.8s ease 0.2s backwards;
-        }
-        
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 2.5rem;
-            animation: scaleIn 0.6s ease 0.4s backwards;
-        }
-        
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #555;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        
-        input {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
             font-size: 1rem;
-            transition: all 0.3s ease;
+            line-height: 1.6;
         }
-        
-        input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-        
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        .spinner {
-            display: none;
-            text-align: center;
-            margin: 1.5rem 0;
-        }
-        
-        .spinner.active { display: block; }
-        
-        .spinner-icon {
-            width: 48px;
-            height: 48px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        
-        .result {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            border-radius: 12px;
-            display: none;
-        }
-        
-        .result.success {
-            background: #e8f5e9;
-            border: 2px solid #66bb6a;
-            color: #2e7d32;
-        }
-        
-        .result.error {
-            background: #ffebee;
-            border: 2px solid #ef5350;
-            color: #d32f2f;
-        }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-        
-        .stat-card {
-            background: white;
-            padding: 1rem;
-            border-radius: 10px;
-            text-align: center;
-            border: 2px solid #667eea;
-        }
-        
-        .stat-label {
-            font-size: 0.8rem;
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-        
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-        }
-        
-        .feature {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-        }
-        
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .feature h3 {
-            color: #667eea;
-            margin-bottom: 0.5rem;
-        }
-        
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* ── Nav bar ── */
+
+        /* ── Nav ── */
         .nav {
             display: flex;
-            justify-content: flex-end;
-            padding: 1.2rem 2rem 0;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 48px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
         }
 
-        .btn-signup {
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            border: 2px solid rgba(255, 255, 255, 0.7);
-            border-radius: 10px;
-            padding: 0.55rem 1.4rem;
-            font-size: 0.95rem;
+        .nav-wordmark {
+            font-size: 0.9375rem;
             font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--black);
+        }
+
+        .btn-nav {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--black);
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 8px 16px;
             cursor: pointer;
-            transition: all 0.25s ease;
-            backdrop-filter: blur(6px);
+            transition: border-color 0.15s;
+            min-height: 36px;
         }
 
-        .btn-signup:hover {
-            background: rgba(255, 255, 255, 0.35);
-            border-color: #fff;
+        .btn-nav:hover { border-color: var(--black); }
+        .btn-nav:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
+
+        /* ── Main ── */
+        main {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 96px 24px 96px;
         }
 
-        /* ── Modal overlay ── */
+        .eyebrow {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--muted);
+            max-width: 46ch;
+            margin-bottom: 48px;
+        }
+
+        /* ── Form ── */
+        .form-group { margin-bottom: 16px; }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 0.9375rem;
+            color: var(--black);
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: border-color 0.15s;
+            -webkit-appearance: none;
+        }
+
+        input:focus        { outline: none; border-color: var(--black); }
+        input::placeholder { color: #9ca3af; }
+
+        .btn-primary {
+            display: block;
+            width: 100%;
+            padding: 11px 16px;
+            margin-top: 24px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--white);
+            background: var(--black);
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: opacity 0.15s;
+            min-height: 44px;
+        }
+
+        .btn-primary:hover:not(:disabled)  { opacity: 0.82; }
+        .btn-primary:focus-visible         { outline: 2px solid var(--black); outline-offset: 2px; }
+        .btn-primary:disabled              { opacity: 0.45; cursor: not-allowed; }
+
+        /* ── Spinner ── */
+        .spinner {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            margin-top: 24px;
+            font-size: 0.875rem;
+            color: var(--muted);
+        }
+
+        .spinner.active { display: flex; }
+
+        .spinner-ring {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border);
+            border-top-color: var(--black);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            flex-shrink: 0;
+        }
+
+        /* ── Result ── */
+        .result {
+            display: none;
+            margin-top: 24px;
+            padding: 14px 16px;
+            border-radius: var(--radius);
+            font-size: 0.9375rem;
+            line-height: 1.5;
+        }
+
+        .result.success {
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+            color: var(--success-text);
+        }
+
+        .result.error {
+            background: var(--error-bg);
+            border: 1px solid var(--error-border);
+            color: var(--error-text);
+        }
+
+        /* ── Features ── */
+        .features {
+            border-top: 1px solid var(--border);
+            margin-top: 64px;
+            padding-top: 48px;
+        }
+
+        .features-label {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 24px;
+        }
+
+        .feature-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .feature-list li {
+            display: flex;
+            gap: 16px;
+            font-size: 0.9375rem;
+        }
+
+        .feature-list li::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--black);
+            margin-top: 10px;
+            flex-shrink: 0;
+        }
+
+        .feature-title { font-weight: 500; margin-bottom: 2px; }
+
+        .feature-desc {
+            font-size: 0.875rem;
+            color: var(--muted);
+        }
+
+        /* ── Modal ── */
         .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 100;
             align-items: center;
             justify-content: center;
+            padding: 24px;
         }
 
-        .modal-overlay.open {
-            display: flex;
-        }
+        .modal-overlay.open { display: flex; }
 
-        /* ── Modal card ── */
-        .modal-card {
-            background: rgba(255, 255, 255, 0.97);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-            padding: 2.5rem;
+        .modal {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px;
             width: 100%;
-            max-width: 460px;
-            margin: 1rem;
+            max-width: 420px;
             position: relative;
-            animation: scaleIn 0.25s ease;
         }
 
         .modal-close {
             position: absolute;
-            top: 1rem;
-            right: 1.2rem;
+            top: 16px;
+            right: 16px;
             background: none;
             border: none;
-            font-size: 1.6rem;
-            color: #888;
+            font-size: 1.25rem;
+            color: var(--muted);
             cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
             line-height: 1;
-            transition: color 0.2s;
+            transition: color 0.15s;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .modal-close:hover { color: #333; }
+        .modal-close:hover        { color: var(--black); }
+        .modal-close:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
 
-        .modal-card h2 {
-            color: #667eea;
-            margin-bottom: 0.3rem;
-            font-size: 1.6rem;
+        .modal h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-bottom: 4px;
         }
 
-        .modal-card .modal-sub {
-            color: #888;
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
+        .modal-sub {
+            font-size: 0.875rem;
+            color: var(--muted);
+            margin-bottom: 24px;
         }
 
         .modal-result {
-            margin-top: 1rem;
-            padding: 1rem 1.2rem;
-            border-radius: 10px;
             display: none;
-            font-size: 0.95rem;
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
         }
 
         .modal-result.success {
-            background: #e8f5e9;
-            border: 2px solid #66bb6a;
-            color: #2e7d32;
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+            color: var(--success-text);
         }
 
         .modal-result.error {
-            background: #ffebee;
-            border: 2px solid #ef5350;
-            color: #d32f2f;
+            background: var(--error-bg);
+            border: 1px solid var(--error-border);
+            color: var(--error-text);
         }
 
         .modal-footer {
-            margin-top: 1.2rem;
+            margin-top: 16px;
             text-align: center;
-            font-size: 0.88rem;
-            color: #888;
+            font-size: 0.8125rem;
+            color: var(--muted);
         }
 
         .modal-footer a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
+            color: var(--black);
+            text-decoration: underline;
+            text-underline-offset: 3px;
         }
 
-        .modal-footer a:hover { text-decoration: underline; }
+        /* ── Keyframes ── */
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .hero p { font-size: 1.1rem; }
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .nav  { padding: 16px 24px; }
+            main  { padding: 64px 24px 64px; }
+            h1    { font-size: 1.75rem; }
         }
     </style>
 </head>
 <body>
-    <nav class="nav">
-        <button class="btn-signup" id="openSignUp">Sign Up</button>
-    </nav>
 
-    <div class="hero">
-        <h1>🎬 YouTube Channel Analyzer</h1>
-        <p>Get instant insights on any YouTube channel - Free & Fast</p>
-    </div>
-    
-    <div class="container">
-        <div class="card">
-            <form id="analyzeForm" method="POST" action="analyze.php">
-                <div class="input-group">
-                    <label for="channel">Channel Name</label>
-                    <input type="text" id="channel" name="channel" placeholder="e.g., MrBeast" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="e.g., you@example.com" required>
-                </div>
-                
-                <button type="submit" class="btn" id="submitBtn">
-                    <span id="btnText">🚀 Analyze Channel</span>
-                </button>
-            </form>
-            
-            <div class="spinner" id="spinner">
-                <div class="spinner-icon"></div>
-                <p style="margin-top: 1rem; color: #667eea;">Analyzing channel...</p>
-            </div>
-            
-            <div class="result" id="result"></div>
+<nav class="nav">
+    <span class="nav-wordmark">TubeAnalyzer</span>
+    <button class="btn-nav" id="openSignUp">Sign up</button>
+</nav>
+
+<main>
+    <p class="eyebrow">Free YouTube analytics</p>
+    <h1>Analyze any YouTube<br>channel in seconds.</h1>
+    <p class="subtitle">Enter a channel name and your email. We'll send you a detailed report on subscribers, views, engagement, and growth.</p>
+
+    <form id="analyzeForm" method="POST" action="analyze.php" novalidate>
+        <div class="form-group">
+            <label for="channel">Channel name</label>
+            <input type="text" id="channel" name="channel" placeholder="e.g. MrBeast" required autocomplete="off">
         </div>
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        </div>
+        <button type="submit" class="btn-primary" id="submitBtn">Analyze channel</button>
+    </form>
+
+    <div class="spinner" id="spinner">
+        <div class="spinner-ring"></div>
+        <span>Analyzing channel&hellip;</span>
     </div>
-    
+
+    <div class="result" id="result"></div>
+
     <div class="features">
-        <div class="feature">
-            <div class="feature-icon">⚡</div>
-            <h3>Instant Analysis</h3>
-            <p>Get comprehensive channel data in seconds</p>
-        </div>
-        <div class="feature">
-            <div class="feature-icon">📧</div>
-            <h3>Email Reports</h3>
-            <p>Beautiful reports delivered to your inbox</p>
-        </div>
-        <div class="feature">
-            <div class="feature-icon">📈</div>
-            <h3>Growth Insights</h3>
-            <p>Track trends and top-performing content</p>
-        </div>
-        <div class="feature">
-            <div class="feature-icon">🔒</div>
-            <h3>Secure & Private</h3>
-            <p>Your data is safe with us</p>
-        </div>
+        <p class="features-label">What you get</p>
+        <ul class="feature-list">
+            <li>
+                <div>
+                    <p class="feature-title">Subscriber count, views &amp; video stats</p>
+                    <p class="feature-desc">Pulled directly from the channel at time of analysis.</p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p class="feature-title">Engagement rate &amp; growth trends</p>
+                    <p class="feature-desc">Understand how a channel performs relative to its size.</p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p class="feature-title">Report delivered to your inbox</p>
+                    <p class="feature-desc">A formatted summary sent immediately after analysis.</p>
+                </div>
+            </li>
+        </ul>
     </div>
-    
-    <!-- Registration Modal -->
-    <div class="modal-overlay" id="signUpModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <div class="modal-card">
-            <button class="modal-close" id="closeSignUp" aria-label="Close">&times;</button>
-            <h2 id="modalTitle">Create Account</h2>
-            <p class="modal-sub">Join TubeAnalyzer — it's free</p>
+</main>
 
-            <form id="registerForm" novalidate>
-                <div class="input-group">
-                    <label for="reg-name">Full Name</label>
-                    <input type="text" id="reg-name" name="name" placeholder="Jane Smith" required>
-                </div>
+<!-- Sign up modal -->
+<div class="modal-overlay" id="signUpModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+        <button class="modal-close" id="closeSignUp" aria-label="Close">&times;</button>
+        <h2 id="modalTitle">Create an account</h2>
+        <p class="modal-sub">Free — takes under a minute.</p>
 
-                <div class="input-group">
-                    <label for="reg-email">Email Address</label>
-                    <input type="email" id="reg-email" name="email" placeholder="jane@example.com" required>
-                </div>
+        <form id="registerForm" novalidate>
+            <div class="form-group">
+                <label for="reg-name">Full name</label>
+                <input type="text" id="reg-name" name="name" placeholder="Jane Smith" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-email">Email address</label>
+                <input type="email" id="reg-email" name="email" placeholder="jane@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-phone">Phone <span style="color:#9ca3af;font-weight:400">(optional)</span></label>
+                <input type="tel" id="reg-phone" name="phone" placeholder="+27 81 234 5678">
+            </div>
+            <div class="form-group">
+                <label for="reg-password">Password</label>
+                <input type="password" id="reg-password" name="password" placeholder="Min. 8 characters" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-confirm">Confirm password</label>
+                <input type="password" id="reg-confirm" name="confirm_password" placeholder="Repeat password" required>
+            </div>
+            <button type="submit" class="btn-primary" id="regSubmitBtn">Create account</button>
+        </form>
 
-                <div class="input-group">
-                    <label for="reg-phone">Phone Number <span style="color:#bbb;font-weight:400">(optional)</span></label>
-                    <input type="tel" id="reg-phone" name="phone" placeholder="+27 81 234 5678">
-                </div>
-
-                <div class="input-group">
-                    <label for="reg-password">Password</label>
-                    <input type="password" id="reg-password" name="password" placeholder="Min. 8 characters" required>
-                </div>
-
-                <div class="input-group">
-                    <label for="reg-confirm">Confirm Password</label>
-                    <input type="password" id="reg-confirm" name="confirm_password" placeholder="Repeat password" required>
-                </div>
-
-                <button type="submit" class="btn" id="regSubmitBtn">
-                    <span id="regBtnText">Create Account</span>
-                </button>
-            </form>
-
-            <div class="modal-result" id="modalResult"></div>
-
-            <p class="modal-footer">Already have an account? <a href="#" id="goToLogin">Login</a></p>
-        </div>
+        <div class="modal-result" id="modalResult"></div>
+        <p class="modal-footer">Already have an account? <a href="#" id="goToLogin">Log in</a></p>
     </div>
+</div>
 
-    <script>
-        document.getElementById('analyzeForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            
-            const form = e.target;
-            const formData = new FormData(form);
-            const submitBtn = document.getElementById('submitBtn');
-            const btnText = document.getElementById('btnText');
-            const spinner = document.getElementById('spinner');
-            const result = document.getElementById('result');
-            
-            // Show loading state
-            submitBtn.disabled = true;
-            btnText.textContent = 'Analyzing...';
-            spinner.classList.add('active');
-            result.style.display = 'none';
-            
-            try {
-                const response = await fetch('analyze.php', {
-                    method: 'POST',
-                    body: formData
-                });
-                // const text = await response.text();s
-                // console.log(text);
-                // const data = JSON.parse(text);
+<script>
+    // ── Analyze form ──
+    document.getElementById('analyzeForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const submitBtn = document.getElementById('submitBtn');
+        const spinner   = document.getElementById('spinner');
+        const result    = document.getElementById('result');
 
-                const data = await response.json();
+        submitBtn.disabled    = true;
+        submitBtn.textContent = 'Analyzing…';
+        spinner.classList.add('active');
+        result.style.display  = 'none';
 
-                result.style.display = 'block';
-                
-                if (data.success) {
-                    result.className = 'result success';
-                    result.innerHTML = `
-                        <h3>✅ ${data.message}</h3>
-                        <p>We've sent a detailed report to your email with visualizations and insights.</p>
-                    `;
-                } else {
-                    result.className = 'result error';
-                    result.innerHTML = `<h3>❌ ${data.message}</h3>`;
-                }
-                
-            } catch (error) {
-                result.style.display = 'block';
+        try {
+            const response = await fetch('analyze.php', { method: 'POST', body: new FormData(e.target) });
+            const data     = await response.json();
+            result.style.display = 'block';
+            if (data.success) {
+                result.className = 'result success';
+                result.innerHTML = '<strong>Report on its way.</strong> ' + data.message;
+            } else {
                 result.className = 'result error';
-                result.innerHTML = `<h3>❌ An error occurred. Please try again.</h3>`;
-            } finally {
-                submitBtn.disabled = false;
-                btnText.textContent = '🚀 Analyze Channel';
-                spinner.classList.remove('active');
+                result.textContent = data.message;
             }
-        });
-    </script>
-
-    <script>
-        const modal      = document.getElementById('signUpModal');
-        const openBtn    = document.getElementById('openSignUp');
-        const closeBtn   = document.getElementById('closeSignUp');
-        const regForm    = document.getElementById('registerForm');
-        const regSubmit  = document.getElementById('regSubmitBtn');
-        const regBtnText = document.getElementById('regBtnText');
-        const regResult  = document.getElementById('modalResult');
-
-        function openModal() {
-            modal.classList.add('open');
-            document.getElementById('reg-name').focus();
+        } catch {
+            result.style.display = 'block';
+            result.className     = 'result error';
+            result.textContent   = 'Something went wrong. Please try again.';
+        } finally {
+            submitBtn.disabled    = false;
+            submitBtn.textContent = 'Analyze channel';
+            spinner.classList.remove('active');
         }
+    });
 
-        function closeModal() {
-            modal.classList.remove('open');
-            regForm.reset();
-            regResult.style.display = 'none';
-            regResult.className = 'modal-result';
-        }
+    // ── Sign up modal ──
+    const modal     = document.getElementById('signUpModal');
+    const openBtn   = document.getElementById('openSignUp');
+    const closeBtn  = document.getElementById('closeSignUp');
+    const regForm   = document.getElementById('registerForm');
+    const regSubmit = document.getElementById('regSubmitBtn');
+    const regResult = document.getElementById('modalResult');
 
-        openBtn.addEventListener('click', openModal);
-        closeBtn.addEventListener('click', closeModal);
-        document.getElementById('goToLogin').addEventListener('click', function(e) {
-            e.preventDefault();
-            // Placeholder — wire up login flow when ready
-        });
+    function openModal()  { modal.classList.add('open'); document.getElementById('reg-name').focus(); }
+    function closeModal() {
+        modal.classList.remove('open');
+        regForm.reset();
+        regResult.style.display = 'none';
+        regResult.className     = 'modal-result';
+    }
 
-        // Close on backdrop click
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) closeModal();
-        });
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+    document.getElementById('goToLogin').addEventListener('click', function(e) { e.preventDefault(); });
 
-        // Close on Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-        });
+    regForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        regSubmit.disabled    = true;
+        regSubmit.textContent = 'Creating account…';
+        regResult.style.display = 'none';
 
-        regForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            regSubmit.disabled = true;
-            regBtnText.textContent = 'Creating account...';
-            regResult.style.display = 'none';
-
-            try {
-                const response = await fetch('register.php', {
-                    method: 'POST',
-                    body: new FormData(regForm)
-                });
-                const data = await response.json();
-
-                regResult.style.display = 'block';
-
-                if (data.success) {
-                    regResult.className = 'modal-result success';
-                    regResult.textContent = '✅ ' + data.message;
-                    regForm.reset();
-                } else {
-                    regResult.className = 'modal-result error';
-                    regResult.textContent = '❌ ' + data.message;
-                }
-            } catch (err) {
-                regResult.style.display = 'block';
-                regResult.className = 'modal-result error';
-                regResult.textContent = '❌ An error occurred. Please try again.';
-            } finally {
-                regSubmit.disabled = false;
-                regBtnText.textContent = 'Create Account';
+        try {
+            const response = await fetch('register.php', { method: 'POST', body: new FormData(regForm) });
+            const data     = await response.json();
+            regResult.style.display = 'block';
+            if (data.success) {
+                regResult.className = 'modal-result success';
+                regResult.textContent = data.message;
+                regForm.reset();
+            } else {
+                regResult.className   = 'modal-result error';
+                regResult.textContent = data.message;
             }
-        });
-    </script>
+        } catch {
+            regResult.style.display = 'block';
+            regResult.className     = 'modal-result error';
+            regResult.textContent   = 'Something went wrong. Please try again.';
+        } finally {
+            regSubmit.disabled    = false;
+            regSubmit.textContent = 'Create account';
+        }
+    });
+</script>
 </body>
 </html>
