@@ -8,16 +8,16 @@ class AnalyzerService {
         $url .= "&emails=" . urlencode($email);
         file_put_contents('analyze_log.txt', "Requesting URL: " . $url . "\n", FILE_APPEND);
         file_put_contents('analyze_log.txt', "Channel Name: " . $channelName . ", Email: " . $email . "\n", FILE_APPEND);
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Accept: application/json'
-        ]);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+        // $ch = curl_init($url);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        //     'Accept: application/json'
+        // ]);
+        // curl_setopt($ch, CURLOPT_TIMEOUT, 60);
         
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+        // $response = curl_exec($ch);
+        // $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        // curl_close($ch);
 
 
         // Using file_get_contents as an alternative to cURL remove after testing

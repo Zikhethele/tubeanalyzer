@@ -8,20 +8,32 @@
 // require_once __DIR__ . '/../services/EmailService.php';
 
 
+// Load .env
+$_envFile = __DIR__ . '/../.env';
+if (file_exists($_envFile)) {
+    foreach (file($_envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $_line) {
+        if (str_starts_with(trim($_line), '#')) continue;
+        [$_key, $_val] = explode('=', $_line, 2);
+        $_val = trim($_val, " \t\n\r\0\x0B'\"");
+        if (!defined(trim($_key))) define(trim($_key), $_val);
+    }
+}
+
 class Config {
     // Database Configuration
-    const DB_HOST = 'localhost';
-    const DB_NAME = 'tubeanm7u9e5_tubeanalyz';
-    const DB_USER = 'tubeanm7u9e5_tubeapp'; //
-    const DB_PASS = ',$AETMD69B~}j{{P';//
+    const DB_HOST = DB_HOST;
+    const DB_PORT = DB_PORT;
+    const DB_NAME = DB_NAME;
+    const DB_USER = DB_USER;
+    const DB_PASS = DB_PASS;
     
     // API Configuration
     const API_BASE_URL = 'https://tube-analyzer.onrender.com';
     
     // Site Configuration
     const SITE_NAME = 'TubeAnalyzer';
-    const SITE_URL = 'http://tubeanalyzer.co.za';
-    const SUPPORT_EMAIL = 'support@tubeanalyzer.co.za';
+    const SITE_URL = 'https://yessherlock.com';
+    const SUPPORT_EMAIL = 'support@yessherlock.com';
     
     // Rate Limiting
     const FREE_DAILY_LIMIT = 5;

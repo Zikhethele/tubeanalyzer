@@ -27,6 +27,33 @@ class User {
         $stmt->execute([':email' => $email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function emailExists($email) {
+        $query = "SELECT COUNT(*) FROM users WHERE email = :email AND password IS NOT NULL";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([':email' => $email]);
+        return (int)$stmt->fetchColumn() > 0;
+    }
+
+    public function registerUser($name, $email, $password, $phone = null) {
+        if ($this->emailExists($email)) {
+            return false;
+        }
+
+        $hashed = password_hash($password, PASSWORD_BCRYPT);
+
+        $query = "INSERT INTO users (name, email, password, phone, created_at)
+                  VALUES (:name, :email, :password, :phone, NOW())";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([
+            ':name'     => $name,
+            ':email'    => $email,
+            ':password' => $hashed,
+            ':phone'    => $phone ?: null,
+        ]);
+
+        return $this->db->lastInsertId();
+    }
     
     public function getDailyUsage($userId) {
         $query = "SELECT COUNT(*) as count FROM analyses 

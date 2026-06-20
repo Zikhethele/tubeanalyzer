@@ -10,20 +10,20 @@
     <meta name="keywords" content="youtube analytics, channel analyzer, youtube stats, social media analytics, influencer metrics, youtube insights">
     <meta name="author" content="TubeAnalyzer">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://tubeanalyzer.co.za">
+    <link rel="canonical" href="https://yessherlock.com">
     
     <!-- Open Graph -->
     <meta property="og:title" content="YouTube Channel Analyzer - Free Analytics Tool">
     <meta property="og:description" content="Get instant insights on any YouTube channel - subscribers, views, engagement rates, and more.">
-    <meta property="og:image" content="https://tubeanalyzer.co.za/assets/og-image.jpg">
-    <meta property="og:url" content="https://tubeanalyzer.co.za">
+    <meta property="og:image" content="https://yessherlock.com/assets/og-image.jpg">
+    <meta property="og:url" content="https://yessherlock.com">
     <meta property="og:type" content="website">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="YouTube Channel Analyzer">
     <meta name="twitter:description" content="Analyze any YouTube channel instantly with our free tool.">
-    <meta name="twitter:image" content="https://tubeanalyzer.co.za/assets/twitter-card.jpg">
+    <meta name="twitter:image" content="https://yessherlock.com/assets/twitter-card.jpg">
     
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -32,7 +32,7 @@
       "@type": "WebApplication",
       "name": "YouTube Channel Analyzer",
       "description": "Free tool to analyze YouTube channel statistics and metrics",
-      "url": "https://tubeanalyzer.co.za",
+      "url": "https://yessherlock.com",
       "applicationCategory": "AnalyticsApplication",
       "offers": {
         "@type": "Offer",
@@ -252,6 +252,122 @@
             100% { transform: rotate(360deg); }
         }
         
+        /* ── Nav bar ── */
+        .nav {
+            display: flex;
+            justify-content: flex-end;
+            padding: 1.2rem 2rem 0;
+        }
+
+        .btn-signup {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            padding: 0.55rem 1.4rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(6px);
+        }
+
+        .btn-signup:hover {
+            background: rgba(255, 255, 255, 0.35);
+            border-color: #fff;
+        }
+
+        /* ── Modal overlay ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        /* ── Modal card ── */
+        .modal-card {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 460px;
+            margin: 1rem;
+            position: relative;
+            animation: scaleIn 0.25s ease;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.2rem;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            color: #888;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover { color: #333; }
+
+        .modal-card h2 {
+            color: #667eea;
+            margin-bottom: 0.3rem;
+            font-size: 1.6rem;
+        }
+
+        .modal-card .modal-sub {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-result {
+            margin-top: 1rem;
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            display: none;
+            font-size: 0.95rem;
+        }
+
+        .modal-result.success {
+            background: #e8f5e9;
+            border: 2px solid #66bb6a;
+            color: #2e7d32;
+        }
+
+        .modal-result.error {
+            background: #ffebee;
+            border: 2px solid #ef5350;
+            color: #d32f2f;
+        }
+
+        .modal-footer {
+            margin-top: 1.2rem;
+            text-align: center;
+            font-size: 0.88rem;
+            color: #888;
+        }
+
+        .modal-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .modal-footer a:hover { text-decoration: underline; }
+
         @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
             .hero p { font-size: 1.1rem; }
@@ -259,6 +375,10 @@
     </style>
 </head>
 <body>
+    <nav class="nav">
+        <button class="btn-signup" id="openSignUp">Sign Up</button>
+    </nav>
+
     <div class="hero">
         <h1>🎬 YouTube Channel Analyzer</h1>
         <p>Get instant insights on any YouTube channel - Free & Fast</p>
@@ -314,6 +434,50 @@
         </div>
     </div>
     
+    <!-- Registration Modal -->
+    <div class="modal-overlay" id="signUpModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-card">
+            <button class="modal-close" id="closeSignUp" aria-label="Close">&times;</button>
+            <h2 id="modalTitle">Create Account</h2>
+            <p class="modal-sub">Join TubeAnalyzer — it's free</p>
+
+            <form id="registerForm" novalidate>
+                <div class="input-group">
+                    <label for="reg-name">Full Name</label>
+                    <input type="text" id="reg-name" name="name" placeholder="Jane Smith" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="reg-email">Email Address</label>
+                    <input type="email" id="reg-email" name="email" placeholder="jane@example.com" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="reg-phone">Phone Number <span style="color:#bbb;font-weight:400">(optional)</span></label>
+                    <input type="tel" id="reg-phone" name="phone" placeholder="+27 81 234 5678">
+                </div>
+
+                <div class="input-group">
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" name="password" placeholder="Min. 8 characters" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="reg-confirm">Confirm Password</label>
+                    <input type="password" id="reg-confirm" name="confirm_password" placeholder="Repeat password" required>
+                </div>
+
+                <button type="submit" class="btn" id="regSubmitBtn">
+                    <span id="regBtnText">Create Account</span>
+                </button>
+            </form>
+
+            <div class="modal-result" id="modalResult"></div>
+
+            <p class="modal-footer">Already have an account? <a href="#" id="goToLogin">Login</a></p>
+        </div>
+    </div>
+
     <script>
         document.getElementById('analyzeForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -364,6 +528,79 @@
                 submitBtn.disabled = false;
                 btnText.textContent = '🚀 Analyze Channel';
                 spinner.classList.remove('active');
+            }
+        });
+    </script>
+
+    <script>
+        const modal      = document.getElementById('signUpModal');
+        const openBtn    = document.getElementById('openSignUp');
+        const closeBtn   = document.getElementById('closeSignUp');
+        const regForm    = document.getElementById('registerForm');
+        const regSubmit  = document.getElementById('regSubmitBtn');
+        const regBtnText = document.getElementById('regBtnText');
+        const regResult  = document.getElementById('modalResult');
+
+        function openModal() {
+            modal.classList.add('open');
+            document.getElementById('reg-name').focus();
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+            regForm.reset();
+            regResult.style.display = 'none';
+            regResult.className = 'modal-result';
+        }
+
+        openBtn.addEventListener('click', openModal);
+        closeBtn.addEventListener('click', closeModal);
+        document.getElementById('goToLogin').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Placeholder — wire up login flow when ready
+        });
+
+        // Close on backdrop click
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeModal();
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+        });
+
+        regForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            regSubmit.disabled = true;
+            regBtnText.textContent = 'Creating account...';
+            regResult.style.display = 'none';
+
+            try {
+                const response = await fetch('register.php', {
+                    method: 'POST',
+                    body: new FormData(regForm)
+                });
+                const data = await response.json();
+
+                regResult.style.display = 'block';
+
+                if (data.success) {
+                    regResult.className = 'modal-result success';
+                    regResult.textContent = '✅ ' + data.message;
+                    regForm.reset();
+                } else {
+                    regResult.className = 'modal-result error';
+                    regResult.textContent = '❌ ' + data.message;
+                }
+            } catch (err) {
+                regResult.style.display = 'block';
+                regResult.className = 'modal-result error';
+                regResult.textContent = '❌ An error occurred. Please try again.';
+            } finally {
+                regSubmit.disabled = false;
+                regBtnText.textContent = 'Create Account';
             }
         });
     </script>

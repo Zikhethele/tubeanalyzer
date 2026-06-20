@@ -1,0 +1,5 @@
+.env
+*.log
+.DS_Store
+pending_log.txt
+analyze_log.txt
