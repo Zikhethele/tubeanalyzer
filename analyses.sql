@@ -4,6 +4,7 @@ CREATE TABLE analyses (
     channel_name VARCHAR(255) NOT NULL,
     data         JSONB,
     email        VARCHAR(50),
+    analyzed     SMALLINT  NOT NULL DEFAULT 0,
     created_at   TIMESTAMP NOT NULL DEFAULT NOW()
 );
 

@@ -27,6 +27,8 @@ $statements = [
     "CREATE INDEX IF NOT EXISTS idx_user_id    ON analyses(user_id)",
     "CREATE INDEX IF NOT EXISTS idx_created_at ON analyses(created_at)",
     "ALTER TABLE analyses ALTER COLUMN user_id DROP NOT NULL",
+    "ALTER TABLE analyses ADD COLUMN IF NOT EXISTS analyzed SMALLINT NOT NULL DEFAULT 0",
+    "CREATE INDEX IF NOT EXISTS idx_analyzed ON analyses(analyzed)",
 ];
 
 $results = [];

@@ -2,7 +2,7 @@ name: TubeAnalyzer Worker
 
 on:
   schedule:
-    - cron: "*/5 * * * *"   # every 5 minutes
+    - cron: "*/5 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -17,35 +17,22 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: curl, pdo, pdo_mysql
+          extensions: curl, pdo, pdo_pgsql
           ini-values: |
             date.timezone=UTC
 
-      # ---- FAIL FAST IF SECRETS ARE MISSING ----
-      - name: Validate required environment variables
+      - name: Validate DATABASE_URL
         env:
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASS: ${{ secrets.DB_PASS }}
-          DB_PORT: ${{ secrets.DB_PORT }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          for var in DB_HOST DB_NAME DB_USER DB_PASS DB_PORT; do
-            if [ -z "${!var}" ]; then
-              echo "❌ $var is MISSING"
-              exit 1
-            else
-              echo "✅ $var is set"
-            fi
-          done
+          if [ -z "$DATABASE_URL" ]; then
+            echo "❌ DATABASE_URL is MISSING"
+            exit 1
+          else
+            echo "✅ DATABASE_URL is set"
+          fi
 
-      # ---- RUN WORKER ----
       - name: Run pending channels worker
         env:
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASS: ${{ secrets.DB_PASS }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-        run: |
-          php pending_channels.php
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: php pending_channels.php
