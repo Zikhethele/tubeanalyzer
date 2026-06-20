@@ -17,6 +17,10 @@ if (file_exists($_envFile)) {
         $_val = trim($_val, " \t\n\r\0\x0B'\"");
         if (!defined(trim($_key))) define(trim($_key), $_val);
     }
+} else {
+    foreach (['DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASS'] as $_key) {
+        if (!defined($_key)) define($_key, (string) getenv($_key));
+    }
 }
 
 class Config {
