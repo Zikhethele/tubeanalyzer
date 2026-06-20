@@ -217,52 +217,6 @@
             color: var(--error-text);
         }
 
-        /* ── Features ── */
-        .features {
-            border-top: 1px solid var(--border);
-            margin-top: 64px;
-            padding-top: 48px;
-        }
-
-        .features-label {
-            font-size: 0.8125rem;
-            font-weight: 500;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 24px;
-        }
-
-        .feature-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .feature-list li {
-            display: flex;
-            gap: 16px;
-            font-size: 0.9375rem;
-        }
-
-        .feature-list li::before {
-            content: '';
-            display: block;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: var(--black);
-            margin-top: 10px;
-            flex-shrink: 0;
-        }
-
-        .feature-title { font-weight: 500; margin-bottom: 2px; }
-
-        .feature-desc {
-            font-size: 0.875rem;
-            color: var(--muted);
-        }
 
         /* ── Modal ── */
         .modal-overlay {
@@ -399,29 +353,6 @@
 
     <div class="result" id="result"></div>
 
-    <div class="features">
-        <p class="features-label">What you get</p>
-        <ul class="feature-list">
-            <li>
-                <div>
-                    <p class="feature-title">Subscriber count, views &amp; video stats</p>
-                    <p class="feature-desc">Pulled directly from the channel at time of analysis.</p>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <p class="feature-title">Engagement rate &amp; growth trends</p>
-                    <p class="feature-desc">Understand how a channel performs relative to its size.</p>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <p class="feature-title">Report delivered to your inbox</p>
-                    <p class="feature-desc">A formatted summary sent immediately after analysis.</p>
-                </div>
-            </li>
-        </ul>
-    </div>
 </main>
 
 <!-- Sign up modal -->
