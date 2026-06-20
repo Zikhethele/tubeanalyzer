@@ -18,8 +18,18 @@ if (file_exists($_envFile)) {
         if (!defined(trim($_key))) define(trim($_key), $_val);
     }
 } else {
-    foreach (['DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASS'] as $_key) {
-        if (!defined($_key)) define($_key, (string) getenv($_key));
+    $_dbUrl = getenv('DATABASE_URL');
+    if ($_dbUrl) {
+        $_p = parse_url($_dbUrl);
+        define('DB_HOST', $_p['host']);
+        define('DB_PORT', (string) ($_p['port'] ?? 5432));
+        define('DB_NAME', ltrim($_p['path'], '/'));
+        define('DB_USER', $_p['user']);
+        define('DB_PASS', $_p['pass']);
+    } else {
+        foreach (['DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASS'] as $_key) {
+            if (!defined($_key)) define($_key, (string) getenv($_key));
+        }
     }
 }
 

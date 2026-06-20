@@ -8,9 +8,9 @@ class User {
     }
     
     public function createUser($email, $name = null) {
-        $query = "INSERT INTO users (email, name, created_at) 
-                  VALUES (:email, :name, NOW()) 
-                  ON DUPLICATE KEY UPDATE last_seen = NOW()";
+        $query = "INSERT INTO users (email, name, created_at)
+                  VALUES (:email, :name, NOW())
+                  ON CONFLICT (email) DO UPDATE SET last_seen = NOW()";
         
         $stmt = $this->db->prepare($query);
         $stmt->execute([
@@ -58,7 +58,7 @@ class User {
     public function getDailyUsage($userId) {
         $query = "SELECT COUNT(*) as count FROM analyses 
                   WHERE user_id = :user_id 
-                  AND DATE(created_at) = CURDATE()";
+                  AND DATE(created_at) = CURRENT_DATE";
         
         $stmt = $this->db->prepare($query);
         $stmt->execute([':user_id' => $userId]);

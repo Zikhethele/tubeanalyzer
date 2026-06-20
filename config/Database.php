@@ -8,7 +8,7 @@ class Database {
     private function __construct() {
         try {
             $this->connection = new PDO(
-                "mysql:host=" . Config::DB_HOST . ";dbname=" . Config::DB_NAME,
+                "pgsql:host=" . Config::DB_HOST . ";port=" . Config::DB_PORT . ";dbname=" . Config::DB_NAME,
                 Config::DB_USER,
                 Config::DB_PASS
             );
