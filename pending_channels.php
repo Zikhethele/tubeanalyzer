@@ -13,7 +13,7 @@ require_once __DIR__ . '/config/Config.php';
 require_once __DIR__ . '/config/Database.php';
 
 define('BATCH_SIZE',  5);
-define('API_TIMEOUT', 60);  // Render free tier cold-starts can take ~50 s
+define('API_TIMEOUT', 120); // Allow time for Render cold-start (~50s) + processing
 
 $API_BASE = Config::API_BASE_URL . '/channel-info';
 
@@ -42,6 +42,20 @@ if (!$rows) {
 }
 
 echo "Processing " . count($rows) . " channel(s)...\n";
+
+// Wake up the Render free-tier service before the batch so cold-start
+// doesn't eat the timeout of the first real request.
+$wakeUrl = Config::API_BASE_URL . '/docs';
+$wch = curl_init($wakeUrl);
+curl_setopt_array($wch, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_TIMEOUT        => 70,
+    CURLOPT_CONNECTTIMEOUT => 10,
+    CURLOPT_FOLLOWLOCATION => true,
+]);
+curl_exec($wch);
+curl_close($wch);
+echo "API warmed up.\n";
 
 // ── Process each row ─────────────────────────────────────────────────────────
 foreach ($rows as $row) {
