@@ -53,7 +53,7 @@ class AnalyzeController {
             // file_put_contents('analyze_log.txt', print_r($data, true), FILE_APPEND);
             
             // Save analysis
-            $userId = 1; // Temporary user ID for demonstration
+            $userId = null;
             $data = '[]';
             $analysisId = $this->analysisModel->createAnalysis($userId, $channelName, $data, $email);
             

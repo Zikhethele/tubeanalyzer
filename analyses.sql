@@ -1,6 +1,6 @@
 CREATE TABLE analyses (
     id           SERIAL PRIMARY KEY,
-    user_id      INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id      INTEGER REFERENCES users(id) ON DELETE CASCADE,
     channel_name VARCHAR(255) NOT NULL,
     data         JSONB,
     email        VARCHAR(50),
