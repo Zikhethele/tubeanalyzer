@@ -7,8 +7,9 @@ class Database {
     
     private function __construct() {
         try {
+            $ssl = getenv('DATABASE_URL') ? ';sslmode=require' : '';
             $this->connection = new PDO(
-                "pgsql:host=" . Config::DB_HOST . ";port=" . Config::DB_PORT . ";dbname=" . Config::DB_NAME,
+                "pgsql:host=" . Config::DB_HOST . ";port=" . Config::DB_PORT . ";dbname=" . Config::DB_NAME . $ssl,
                 Config::DB_USER,
                 Config::DB_PASS
             );

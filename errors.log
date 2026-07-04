@@ -10,3 +10,19 @@
 [22-Jan-2026 17:05:27 UTC] PHP Warning:  Undefined variable $httpCode in /Users/zikhethelegumede/Sites/TubeAnalyzer/models/AnalyzerService.php on line 23
 [22-Jan-2026 17:06:40 UTC] PHP Warning:  Undefined variable $response in /Users/zikhethelegumede/Sites/TubeAnalyzer/models/AnalyzerService.php on line 32
 [22-Jan-2026 17:06:40 UTC] PHP Deprecated:  json_decode(): Passing null to parameter #1 ($json) of type string is deprecated in /Users/zikhethelegumede/Sites/TubeAnalyzer/models/AnalyzerService.php on line 32
+[24-Jan-2026 06:39:56 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /Users/zikhethelegumede/Sites/TubeAnalyzer/models/AnalyzerService.php on line 19
+[24-Jan-2026 07:37:36 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tubeanm7u9e5_tubeanalyz.channel_requests' doesn't exist in /Users/zikhethelegumede/Sites/TubeAnalyzer/pending_channels.php:35
+Stack trace:
+#0 /Users/zikhethelegumede/Sites/TubeAnalyzer/pending_channels.php(35): PDOStatement->execute()
+#1 {main}
+  thrown in /Users/zikhethelegumede/Sites/TubeAnalyzer/pending_channels.php on line 35
+[24-Jan-2026 07:41:57 UTC] Render failed [ID 2] HTTP 0 Operation timed out after 30005 milliseconds with 0 bytes received
+[24-Jan-2026 07:42:27 UTC] Render failed [ID 3] HTTP 0 Operation timed out after 30004 milliseconds with 0 bytes received
+[24-Jan-2026 07:43:31 UTC] Render failed [ID 2] HTTP 0 Operation timed out after 30005 milliseconds with 0 bytes received
+[24-Jan-2026 07:44:01 UTC] Render failed [ID 3] HTTP 0 Operation timed out after 30002 milliseconds with 0 bytes received
+[24-Jan-2026 07:46:05 UTC] Render failed [ID 2] HTTP 0 Operation timed out after 30005 milliseconds with 0 bytes received
+[24-Jan-2026 07:47:42 UTC] Render failed [ID 2] HTTP 0 Operation timed out after 30005 milliseconds with 0 bytes received
+[24-Jan-2026 07:51:20 UTC] Render failed [ID 2] HTTP 0 Operation timed out after 30005 milliseconds with 0 bytes received
+[24-Jan-2026 07:54:15 UTC] Render failed [ID 2] HTTP 0 Operation timed out after 30002 milliseconds with 0 bytes received
+[24-Jan-2026 07:58:15 UTC] Render failed [ID 2] HTTP 0 Operation timed out after 30003 milliseconds with 0 bytes received
+[21-Feb-2026 08:00:40 UTC] Render failed [ID 2] HTTP 0 Operation timed out after 30004 milliseconds with 0 bytes received

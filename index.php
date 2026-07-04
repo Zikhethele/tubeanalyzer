@@ -46,6 +46,17 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "TubeAnalyzer",
+      "url": "https://yessherlock.com",
+      "email": "support@yessherlock.com",
+      "description": "Free YouTube channel analytics — subscribers, views, engagement rates, and growth trends delivered to your inbox."
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
       "@type": "FAQPage",
       "mainEntity": [
         {
@@ -539,6 +550,12 @@
 </div>
 
 <script>
+    // ── Prefill channel from ?channel= URL param ──
+    (function () {
+        var ch = new URLSearchParams(window.location.search).get('channel');
+        if (ch) document.getElementById('channel').value = ch;
+    })();
+
     // ── Example channel chips ──
     document.querySelectorAll('.chip').forEach(function(chip) {
         chip.addEventListener('click', function() {

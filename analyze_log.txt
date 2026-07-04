@@ -20,3 +20,21 @@ Requesting URL: https://tube-analyzer.onrender.com/channel-info?channel_name=SNL
 Channel Name: SNL, Email: zikhethelegumede@gmail.com
 Requesting URL: https://tube-analyzer.onrender.com/channel-info?channel_name=MacG&emails=zikhethelegumede%40gmail.com
 Channel Name: MacG, Email: zikhethelegumede@gmail.com
+Requesting URL: https://tube-analyzer.onrender.com/channel-info?channel_name=MacG&emails=zikhethelegumede%40gmail.com
+Channel Name: MacG, Email: zikhethelegumede@gmail.com
+Requesting URL: https://tube-analyzer.onrender.com/channel-info?channel_name=MacG&emails=zikhethelegumede%40gmail.com
+Channel Name: MacG, Email: zikhethelegumede@gmail.com
+Requesting URL: https://tube-analyzer.onrender.com/channel-info?channel_name=MacG&emails=zikhethelegumede%40gmail.com
+Channel Name: MacG, Email: zikhethelegumede@gmail.com
+Requesting URL: https://tube-analyzer.onrender.com/channel-info?channel_name=SNL&emails=zikhethelegumede%40gmail.com
+Channel Name: SNL, Email: zikhethelegumede@gmail.com
+Requesting URL: https://tube-analyzer.onrender.com/channel-info?channel_name=SNL&emails=zikhetheleg%40icloud.com
+Channel Name: SNL, Email: zikhetheleg@icloud.com
+Requesting URL: https://tube-analyzer.onrender.com/channel-info?channel_name=h&emails=zikhetheleg%40icloud.com
+Channel Name: h, Email: zikhetheleg@icloud.com
+Requesting URL: https://tube-analyzer.onrender.com/channel-info?channel_name=Hagerty&emails=zikhethelegumede%40gmail.com
+Channel Name: Hagerty, Email: zikhethelegumede@gmail.com
+Requesting URL: https://tube-analyzer.onrender.com/channel-info?channel_name=MrBeast&emails=zikhethelegumede%40gmail.com
+Channel Name: MrBeast, Email: zikhethelegumede@gmail.com
+Requesting URL: https://tube-analyzer.onrender.com/channel-info?channel_name=MacG&emails=zikhetheleg%40icloud.com
+Channel Name: MacG, Email: zikhetheleg@icloud.com

@@ -1,0 +1,9 @@
+Options -Indexes
+RewriteEngine On
+
+# Skip rewriting for real files and directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# /channel/{slug} → channel.php?slug={slug}
+RewriteRule ^channel/([^/]+)/?$ channel.php?slug=$1 [L,QSA]
