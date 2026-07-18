@@ -2,7 +2,7 @@
   "extraKnownMarketplaces": {
     "impeccable": {
       "source": {
-        "type": "github",
+        "source": "github",
         "repo": "pbakaus/impeccable"
       }
     }
