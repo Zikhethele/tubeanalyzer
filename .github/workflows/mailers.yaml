@@ -1,0 +1,50 @@
+name: TubeAnalyzer Campaign Mailers
+
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+
+jobs:
+  run-mailers:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: curl, pdo, pdo_pgsql
+          ini-values: |
+            date.timezone=UTC
+
+      - name: Validate secrets
+        env:
+          DATABASE_URL:   ${{ secrets.DATABASE_URL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          APP_SECRET:     ${{ secrets.APP_SECRET }}
+        run: |
+          for v in DATABASE_URL RESEND_API_KEY APP_SECRET; do
+            if [ -z "${!v}" ]; then
+              echo "❌ $v is MISSING"
+              exit 1
+            fi
+          done
+          echo "✅ all secrets set"
+
+      - name: Run retention mailer
+        env:
+          DATABASE_URL:   ${{ secrets.DATABASE_URL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          APP_SECRET:     ${{ secrets.APP_SECRET }}
+        run: php mailer_retention.php
+
+      - name: Run prospect mailer
+        env:
+          DATABASE_URL:   ${{ secrets.DATABASE_URL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          APP_SECRET:     ${{ secrets.APP_SECRET }}
+        run: php mailer_prospects.php

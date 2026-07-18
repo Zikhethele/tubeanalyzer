@@ -32,6 +32,9 @@ if (file_exists($_envFile)) {
         }
     }
 }
+foreach (['RESEND_API_KEY', 'APP_SECRET'] as $_key) {
+    if (!defined($_key)) define($_key, (string) getenv($_key));
+}
 
 class Config {
     // Database Configuration
@@ -43,11 +46,16 @@ class Config {
     
     // API Configuration
     const API_BASE_URL = 'https://tube-analyzer.onrender.com';
-    
+
     // Site Configuration
     const SITE_NAME = 'TubeAnalyzer';
     const SITE_URL = 'https://yessherlock.com';
     const SUPPORT_EMAIL = 'support@yessherlock.com';
+
+    // Email campaigns (Resend)
+    const RESEND_API_KEY = RESEND_API_KEY;
+    const RESEND_FROM    = 'TubeAnalyzer <hello@yessherlock.com>';
+    const APP_SECRET     = APP_SECRET; // signs unsubscribe links — must match between wherever mailers run and the web app
     
     // Rate Limiting
     const FREE_DAILY_LIMIT = 5;

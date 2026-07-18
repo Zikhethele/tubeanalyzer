@@ -6,7 +6,7 @@ RewriteEngine On
 <FilesMatch "\.(log|sql)$">
     Require all denied
 </FilesMatch>
-<FilesMatch "^(info|db_test|migrate|database)\.php$">
+<FilesMatch "^(info|db_test|migrate|database|pending_channels|mailer_common|mailer_retention|mailer_prospects)\.php$">
     Require all denied
 </FilesMatch>
 <Files "index.html">
