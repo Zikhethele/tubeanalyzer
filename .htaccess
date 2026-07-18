@@ -1,9 +1,27 @@
 Options -Indexes
 RewriteEngine On
 
+# Block direct access to logs, schema dumps, and dev/debug scripts —
+# these were committed to the repo and would otherwise be served publicly.
+<FilesMatch "\.(log|sql)$">
+    Require all denied
+</FilesMatch>
+<FilesMatch "^(info|db_test|migrate|database)\.php$">
+    Require all denied
+</FilesMatch>
+<Files "index.html">
+    Require all denied
+</Files>
+<Files "test_write.txt">
+    Require all denied
+</Files>
+
 # Skip rewriting for real files and directories
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
 # /channel/{slug} → channel.php?slug={slug}
 RewriteRule ^channel/([^/]+)/?$ channel.php?slug=$1 [L,QSA]
+
+# /sitemap.xml → sitemap.php
+RewriteRule ^sitemap\.xml$ sitemap.php [L]

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /analyze.php
+Disallow: /register.php
+Disallow: /migrate.php
+Disallow: /info.php
+Disallow: /db_test.php
+
+Sitemap: https://yessherlock.com/sitemap.xml

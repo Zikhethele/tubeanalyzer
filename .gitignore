@@ -5,3 +5,4 @@ pending_log.txt
 analyze_log.txt
 *.sql
 *.log
+migrate.php
