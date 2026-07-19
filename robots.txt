@@ -6,5 +6,6 @@ Disallow: /migrate.php
 Disallow: /info.php
 Disallow: /db_test.php
 Disallow: /admin.php
+Disallow: /admin_prospects.php
 
 Sitemap: https://yessherlock.com/sitemap.xml
