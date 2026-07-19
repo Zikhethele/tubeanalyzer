@@ -32,7 +32,7 @@ if (file_exists($_envFile)) {
         }
     }
 }
-foreach (['RESEND_API_KEY', 'APP_SECRET'] as $_key) {
+foreach (['RESEND_API_KEY', 'APP_SECRET', 'ADMIN_PASSWORD'] as $_key) {
     if (!defined($_key)) define($_key, (string) getenv($_key));
 }
 
@@ -56,6 +56,9 @@ class Config {
     const RESEND_API_KEY = RESEND_API_KEY;
     const RESEND_FROM    = 'TubeAnalyzer <hello@yessherlock.com>';
     const APP_SECRET     = APP_SECRET; // signs unsubscribe links — must match between wherever mailers run and the web app
+
+    // Admin
+    const ADMIN_PASSWORD = ADMIN_PASSWORD; // gates admin.php
     
     // Rate Limiting
     const FREE_DAILY_LIMIT = 5;
