@@ -39,7 +39,7 @@ $stmt = $db->prepare("
     FROM   prospects p
     WHERE  NOT EXISTS (
                SELECT 1 FROM email_sends s
-               WHERE  s.campaign = :campaign AND s.email = LOWER(p.email)
+               WHERE  s.campaign = :campaign AND s.email = LOWER(p.email) AND s.status = 'sent'
            )
     ORDER  BY p.created_at ASC
     LIMIT  " . BATCH_SIZE

@@ -43,7 +43,7 @@ function isSuppressed(PDO $db, string $email): bool {
 }
 
 function alreadySent(PDO $db, string $campaign, string $email): bool {
-    $stmt = $db->prepare("SELECT 1 FROM email_sends WHERE campaign = :campaign AND email = :email");
+    $stmt = $db->prepare("SELECT 1 FROM email_sends WHERE campaign = :campaign AND email = :email AND status = 'sent'");
     $stmt->execute([':campaign' => $campaign, ':email' => strtolower(trim($email))]);
     return (bool) $stmt->fetchColumn();
 }
