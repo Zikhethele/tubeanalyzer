@@ -285,6 +285,44 @@
             text-align: center;
         }
 
+        /* ── Consent checkbox ──
+           The <label for="consent"> covers the full text line, so the
+           clickable/tappable area is far larger than the 18px box itself. */
+        .consent-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 16px;
+            padding: 4px 0;
+        }
+
+        .consent-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            flex-shrink: 0;
+            accent-color: var(--black);
+            cursor: pointer;
+        }
+
+        .consent-row label {
+            font-size: 0.8125rem;
+            font-weight: 400;
+            color: var(--muted);
+            margin-bottom: 0;
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .consent-row label a { color: var(--black); }
+
+        .consent-error {
+            display: none;
+            margin-top: 8px;
+            font-size: 0.8125rem;
+            color: var(--error-text);
+        }
+
         /* ── Spinner ── */
         .spinner {
             display: none;
@@ -492,6 +530,17 @@
                 <label for="email">Email address</label>
                 <input type="email" id="email" name="email" placeholder="you@example.com" required>
             </div>
+
+            <div class="consent-row">
+                <input type="checkbox" id="consent" name="consent" required>
+                <label for="consent">
+                    I agree to the <a href="terms.php" target="_blank">Terms of Use &amp; Privacy Policy</a>,
+                    and understand TubeAnalyzer uses YouTube API Services to fetch public
+                    channel data (<a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>).
+                </label>
+            </div>
+            <p class="consent-error" id="consentError">Please agree to the Terms of Use &amp; Privacy Policy to continue.</p>
+
             <button type="submit" class="btn-primary" id="submitBtn">Analyze channel</button>
         </form>
 
@@ -509,7 +558,11 @@
 <footer>
     <div class="footer-inner">
         <span>&copy; 2026 TubeAnalyzer</span>
-        <a href="mailto:support@yessherlock.com">support@yessherlock.com</a>
+        <span>
+            <a href="terms.php">Terms &amp; Privacy</a>
+            &middot;
+            <a href="mailto:support@yessherlock.com">support@yessherlock.com</a>
+        </span>
     </div>
 </footer>
 
@@ -541,6 +594,17 @@
                 <label for="reg-confirm">Confirm password</label>
                 <input type="password" id="reg-confirm" name="confirm_password" placeholder="Repeat password" required>
             </div>
+
+            <div class="consent-row">
+                <input type="checkbox" id="reg-consent" name="consent" required>
+                <label for="reg-consent">
+                    I agree to the <a href="terms.php" target="_blank">Terms of Use &amp; Privacy Policy</a>,
+                    and understand TubeAnalyzer uses YouTube API Services to fetch public
+                    channel data (<a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>).
+                </label>
+            </div>
+            <p class="consent-error" id="regConsentError">Please agree to the Terms of Use &amp; Privacy Policy to continue.</p>
+
             <button type="submit" class="btn-primary" id="regSubmitBtn">Create account</button>
         </form>
 
@@ -567,9 +631,18 @@
     // ── Analyze form ──
     document.getElementById('analyzeForm').addEventListener('submit', async function(e) {
         e.preventDefault();
-        const submitBtn = document.getElementById('submitBtn');
-        const spinner   = document.getElementById('spinner');
-        const result    = document.getElementById('result');
+        const submitBtn     = document.getElementById('submitBtn');
+        const spinner       = document.getElementById('spinner');
+        const result        = document.getElementById('result');
+        const consent       = document.getElementById('consent');
+        const consentError  = document.getElementById('consentError');
+
+        if (!consent.checked) {
+            consentError.style.display = 'block';
+            consent.focus();
+            return;
+        }
+        consentError.style.display = 'none';
 
         submitBtn.disabled    = true;
         submitBtn.textContent = 'Analyzing…';
@@ -612,6 +685,7 @@
         regForm.reset();
         regResult.style.display = 'none';
         regResult.className     = 'modal-result';
+        document.getElementById('regConsentError').style.display = 'none';
     }
 
     openBtn.addEventListener('click', openModal);
@@ -622,6 +696,17 @@
 
     regForm.addEventListener('submit', async function(e) {
         e.preventDefault();
+
+        const regConsent      = document.getElementById('reg-consent');
+        const regConsentError = document.getElementById('regConsentError');
+
+        if (!regConsent.checked) {
+            regConsentError.style.display = 'block';
+            regConsent.focus();
+            return;
+        }
+        regConsentError.style.display = 'none';
+
         regSubmit.disabled    = true;
         regSubmit.textContent = 'Creating account…';
         regResult.style.display = 'none';

@@ -16,6 +16,12 @@ $email            = trim($_POST['email'] ?? '');
 $phone            = trim($_POST['phone'] ?? '');
 $password         = $_POST['password'] ?? '';
 $confirm_password = $_POST['confirm_password'] ?? '';
+$consent          = $_POST['consent'] ?? '';
+
+if ($consent === '') {
+    echo json_encode(['success' => false, 'message' => 'You must agree to the Terms of Use & Privacy Policy.']);
+    exit;
+}
 
 // Validate name
 if ($name === '') {

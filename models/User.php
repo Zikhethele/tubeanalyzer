@@ -42,8 +42,8 @@ class User {
 
         $hashed = password_hash($password, PASSWORD_BCRYPT);
 
-        $query = "INSERT INTO users (name, email, password, phone, created_at)
-                  VALUES (:name, :email, :password, :phone, NOW())";
+        $query = "INSERT INTO users (name, email, password, phone, created_at, consent_at)
+                  VALUES (:name, :email, :password, :phone, NOW(), NOW())";
         $stmt = $this->db->prepare($query);
         $stmt->execute([
             ':name'     => $name,

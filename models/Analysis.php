@@ -8,10 +8,10 @@ class Analysis {
         $this->db = Database::getInstance()->getConnection();
     }
     
-    public function createAnalysis($userId, $channelName, $data,$email) {
-        $query = "INSERT INTO analyses (user_id, channel_name, data, created_at, email) 
-                  VALUES (:user_id, :channel_name, :data, NOW(), :email)";
-        
+    public function createAnalysis($userId, $channelName, $data, $email) {
+        $query = "INSERT INTO analyses (user_id, channel_name, data, created_at, email, consent_at)
+                  VALUES (:user_id, :channel_name, :data, NOW(), :email, NOW())";
+
         $stmt = $this->db->prepare($query);
         $stmt->execute([
             ':user_id' => $userId,
@@ -19,7 +19,7 @@ class Analysis {
             ':data' => json_encode($data),
             ':email' => $email
         ]);
-        
+
         return $this->db->lastInsertId();
     }
     

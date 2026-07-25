@@ -33,6 +33,7 @@ require_once __DIR__ . '/controllers/AnalyzeController.php';
 try {
     $channelName = trim($_POST['channel'] ?? '');
     $email       = trim($_POST['email'] ?? '');
+    $consent     = $_POST['consent'] ?? '';
 
     if ($channelName === '' || $email === '') {
         echo json_encode([
@@ -46,6 +47,14 @@ try {
         echo json_encode([
             'success' => false,
             'message' => 'Invalid email address'
+        ]);
+        exit;
+    }
+
+    if ($consent === '') {
+        echo json_encode([
+            'success' => false,
+            'message' => 'You must agree to the Terms of Use & Privacy Policy'
         ]);
         exit;
     }
