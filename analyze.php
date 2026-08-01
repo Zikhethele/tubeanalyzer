@@ -28,7 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // --- LOAD DEPENDENCIES (ABSOLUTE PATHS) ---
 require_once __DIR__ . '/config/Config.php';
+require_once __DIR__ . '/config/Auth.php';
 require_once __DIR__ . '/controllers/AnalyzeController.php';
+
+authStart();
+$currentUser = authCurrentUser();
 
 try {
     $channelName = trim($_POST['channel'] ?? '');
@@ -60,7 +64,7 @@ try {
     }
 
     $controller = new AnalyzeController();
-    $result = $controller->analyze($channelName, $email);
+    $result = $controller->analyze($channelName, $email, $currentUser['id'] ?? null);
 
     // Enforce JSON shape
     echo json_encode([

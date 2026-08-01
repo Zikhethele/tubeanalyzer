@@ -1,17 +1,20 @@
 <?php
 
 require_once __DIR__ . '/../models/Analysis.php';
+require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../config/Config.php';
 require_once __DIR__ . '/../config/Database.php';
 
 class AnalyzeController {
     private $analysisModel;
+    private $userModel;
 
     public function __construct() {
         $this->analysisModel = new Analysis();
+        $this->userModel     = new User();
     }
 
-    public function analyze($channelName, $email) {
+    public function analyze($channelName, $email, $userId = null) {
         try {
             if (empty($channelName) || empty($email)) {
                 throw new Exception("Channel name and email are required");
@@ -21,9 +24,19 @@ class AnalyzeController {
                 throw new Exception("Invalid email address");
             }
 
+            if ($userId !== null) {
+                $user  = $this->userModel->getUserById($userId);
+                $tier  = $user['subscription_tier'] ?? 'free';
+                $limit = $tier === 'pro' ? Config::PRO_DAILY_LIMIT : Config::FREE_DAILY_LIMIT;
+
+                if ($this->userModel->getDailyUsage($userId) >= $limit) {
+                    throw new Exception("You've reached your daily limit of $limit analyses. Try again tomorrow.");
+                }
+            }
+
             // Save as pending — the GitHub Actions worker picks this up,
             // calls the FastAPI, and sends the email via Resend.
-            $this->analysisModel->createAnalysis(null, $channelName, '[]', $email);
+            $this->analysisModel->createAnalysis($userId, $channelName, '[]', $email);
 
             return [
                 'success' => true,

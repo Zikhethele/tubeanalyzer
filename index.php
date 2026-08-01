@@ -1,3 +1,8 @@
+<?php
+require_once __DIR__ . '/config/Auth.php';
+authStart();
+$currentUser = authCurrentUser();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -155,6 +160,32 @@
 
         .btn-nav:hover        { border-color: var(--black); }
         .btn-nav:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--muted);
+            background: none;
+            border: none;
+            padding: 7px 4px;
+            cursor: pointer;
+            min-height: 36px;
+            text-decoration: none;
+        }
+
+        .nav-link:hover         { color: var(--black); }
+        .nav-link:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
+
+        .nav-greeting {
+            font-size: 0.875rem;
+            color: var(--muted);
+        }
 
         /* ── Main ── */
         main {
@@ -501,7 +532,17 @@
 <nav class="nav" role="banner">
     <div class="nav-inner">
         <span class="nav-wordmark">TubeAnalyzer</span>
-        <button class="btn-nav" id="openSignUp">Sign up</button>
+        <?php if ($currentUser): ?>
+        <div class="nav-actions">
+            <span class="nav-greeting">Hi, <?= htmlspecialchars($currentUser['name'] ?: $currentUser['email'], ENT_QUOTES, 'UTF-8') ?></span>
+            <a class="nav-link" href="logout.php">Log out</a>
+        </div>
+        <?php else: ?>
+        <div class="nav-actions">
+            <button class="nav-link" id="openLogIn">Log in</button>
+            <button class="btn-nav" id="openSignUp">Sign up</button>
+        </div>
+        <?php endif; ?>
     </div>
 </nav>
 
@@ -613,6 +654,31 @@
     </div>
 </div>
 
+<!-- Log in modal -->
+<div class="modal-overlay" id="logInModal" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
+    <div class="modal">
+        <button class="modal-close" id="closeLogIn" aria-label="Close">&times;</button>
+        <h2 id="loginModalTitle">Log in</h2>
+        <p class="modal-sub">Welcome back.</p>
+
+        <form id="loginForm" novalidate>
+            <div class="form-group">
+                <label for="login-email">Email address</label>
+                <input type="email" id="login-email" name="email" placeholder="jane@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" name="password" placeholder="Your password" required>
+            </div>
+
+            <button type="submit" class="btn-primary" id="loginSubmitBtn">Log in</button>
+        </form>
+
+        <div class="modal-result" id="loginModalResult"></div>
+        <p class="modal-footer">Don't have an account? <a href="#" id="goToSignUp">Sign up</a></p>
+    </div>
+</div>
+
 <script>
     // ── Prefill channel from ?channel= URL param ──
     (function () {
@@ -679,6 +745,13 @@
     const regSubmit = document.getElementById('regSubmitBtn');
     const regResult = document.getElementById('modalResult');
 
+    const loginModal  = document.getElementById('logInModal');
+    const openLoginBtn  = document.getElementById('openLogIn');
+    const closeLoginBtn = document.getElementById('closeLogIn');
+    const loginForm    = document.getElementById('loginForm');
+    const loginSubmit  = document.getElementById('loginSubmitBtn');
+    const loginResult  = document.getElementById('loginModalResult');
+
     function openModal()  { modal.classList.add('open'); document.getElementById('reg-name').focus(); }
     function closeModal() {
         modal.classList.remove('open');
@@ -688,11 +761,65 @@
         document.getElementById('regConsentError').style.display = 'none';
     }
 
-    openBtn.addEventListener('click', openModal);
+    function openLoginModal()  { loginModal.classList.add('open'); document.getElementById('login-email').focus(); }
+    function closeLoginModal() {
+        loginModal.classList.remove('open');
+        loginForm.reset();
+        loginResult.style.display = 'none';
+        loginResult.className     = 'modal-result';
+    }
+
+    if (openBtn) openBtn.addEventListener('click', openModal);
     closeBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
-    document.getElementById('goToLogin').addEventListener('click', function(e) { e.preventDefault(); });
+
+    if (openLoginBtn) openLoginBtn.addEventListener('click', openLoginModal);
+    closeLoginBtn.addEventListener('click', closeLoginModal);
+    loginModal.addEventListener('click', function(e) { if (e.target === loginModal) closeLoginModal(); });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key !== 'Escape') return;
+        if (modal.classList.contains('open')) closeModal();
+        if (loginModal.classList.contains('open')) closeLoginModal();
+    });
+
+    document.getElementById('goToLogin').addEventListener('click', function(e) {
+        e.preventDefault();
+        closeModal();
+        openLoginModal();
+    });
+    document.getElementById('goToSignUp').addEventListener('click', function(e) {
+        e.preventDefault();
+        closeLoginModal();
+        openModal();
+    });
+
+    loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        loginSubmit.disabled    = true;
+        loginSubmit.textContent = 'Logging in…';
+        loginResult.style.display = 'none';
+
+        try {
+            const response = await fetch('login.php', { method: 'POST', body: new FormData(loginForm) });
+            const data     = await response.json();
+            if (data.success) {
+                window.location.reload();
+                return;
+            }
+            loginResult.style.display = 'block';
+            loginResult.className     = 'modal-result error';
+            loginResult.textContent   = data.message;
+        } catch {
+            loginResult.style.display = 'block';
+            loginResult.className     = 'modal-result error';
+            loginResult.textContent   = 'Something went wrong. Please try again.';
+        } finally {
+            loginSubmit.disabled    = false;
+            loginSubmit.textContent = 'Log in';
+        }
+    });
 
     regForm.addEventListener('submit', async function(e) {
         e.preventDefault();

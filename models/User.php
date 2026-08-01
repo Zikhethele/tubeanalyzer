@@ -21,6 +21,13 @@ class User {
         return $this->db->lastInsertId();
     }
     
+    public function getUserById($id) {
+        $query = "SELECT * FROM users WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function getUserByEmail($email) {
         $query = "SELECT * FROM users WHERE email = :email";
         $stmt = $this->db->prepare($query);
@@ -55,6 +62,21 @@ class User {
         return $this->db->lastInsertId();
     }
     
+    public function verifyCredentials($email, $password) {
+        $user = $this->getUserByEmail($email);
+        if (!$user || !$user['password'] || !password_verify($password, $user['password'])) {
+            return false;
+        }
+        unset($user['password']);
+        return $user;
+    }
+
+    public function updateLastSeen($userId) {
+        $query = "UPDATE users SET last_seen = NOW() WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([':id' => $userId]);
+    }
+
     public function getDailyUsage($userId) {
         $query = "SELECT COUNT(*) as count FROM analyses 
                   WHERE user_id = :user_id 
