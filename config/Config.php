@@ -32,7 +32,7 @@ if (file_exists($_envFile)) {
         }
     }
 }
-foreach (['RESEND_API_KEY', 'APP_SECRET', 'ADMIN_PASSWORD'] as $_key) {
+foreach (['RESEND_API_KEY', 'APP_SECRET', 'ADMIN_PASSWORD', 'INSTAGRAM_API_URL'] as $_key) {
     if (!defined($_key)) define($_key, (string) getenv($_key));
 }
 
@@ -46,6 +46,7 @@ class Config {
     
     // API Configuration
     const API_BASE_URL = 'https://tube-analyzer.onrender.com';
+    const INSTAGRAM_API_URL = INSTAGRAM_API_URL; // set via .env / Render env var
 
     // Site Configuration
     const SITE_NAME = 'TubeAnalyzer';

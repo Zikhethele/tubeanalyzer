@@ -2,6 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /analyze.php
 Disallow: /register.php
+Disallow: /instagram_audit.php
 Disallow: /migrate.php
 Disallow: /info.php
 Disallow: /db_test.php

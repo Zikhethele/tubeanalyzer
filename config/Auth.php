@@ -29,6 +29,18 @@ function authLogin(array $user): void {
     ];
 }
 
+/** Returns the logged-in user, or halts the request with a 401 JSON body. */
+function authRequireUser(): array {
+    $user = authCurrentUser();
+    if (!$user) {
+        http_response_code(401);
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => 'Please log in to use this feature.']);
+        exit;
+    }
+    return $user;
+}
+
 function authLogout(): void {
     authStart();
     $_SESSION = [];
