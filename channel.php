@@ -514,5 +514,6 @@ foreach (array_slice($videos, 0, 5) as $v) {
     </div>
 </footer>
 
+<?php include __DIR__ . '/partials/cookie-notice.php'; ?>
 </body>
 </html>

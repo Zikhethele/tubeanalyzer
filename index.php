@@ -860,5 +860,7 @@ $currentUser = authCurrentUser();
         }
     });
 </script>
+
+<?php include __DIR__ . '/partials/cookie-notice.php'; ?>
 </body>
 </html>

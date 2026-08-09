@@ -167,7 +167,7 @@
 <main>
     <p class="eyebrow">Legal</p>
     <h1>Terms of Use &amp; Privacy Policy</h1>
-    <p class="updated">Effective 25 July 2026</p>
+    <p class="updated">Effective 9 August 2026</p>
 
     <div class="callout">
         TubeAnalyzer is a free tool for looking up publicly available YouTube channel
@@ -249,7 +249,21 @@
         </ul>
         <p>We do not require or request access to your YouTube or Google account.</p>
 
-        <h3>3. YouTube API Services &amp; Google data</h3>
+        <h3 id="cookies">3. Cookies</h3>
+        <p>
+            TubeAnalyzer sets a single cookie: the standard PHP session cookie, created
+            when you sign in. It contains no tracking identifiers and is used solely to
+            keep you signed in as you move between pages. It is a session cookie — it
+            expires automatically when you close your browser, and we do not use it to
+            follow you across other sites.
+        </p>
+        <p>
+            We do not use any third-party, advertising, or analytics cookies. If you
+            block or clear cookies, TubeAnalyzer will still work for anonymous analysis,
+            but signing in to your account will not.
+        </p>
+
+        <h3>4. YouTube API Services &amp; Google data</h3>
         <p>
             TubeAnalyzer uses YouTube API Services to retrieve publicly available channel
             data (subscriber counts, view counts, video metadata, and statistics). By
@@ -259,7 +273,7 @@
             governed by the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.
         </p>
 
-        <h3>4. How we use your data</h3>
+        <h3>5. How we use your data</h3>
         <ul>
             <li>To generate and email your requested channel report;</li>
             <li>To prevent abuse of the service (rate limiting by IP address);</li>
@@ -267,7 +281,7 @@
         </ul>
         <p>We do not sell your personal data, and we do not use it for advertising.</p>
 
-        <h3>5. Who we share data with</h3>
+        <h3>6. Who we share data with</h3>
         <p>We use the following service providers to operate TubeAnalyzer, each of which processes a limited slice of data on our behalf:</p>
         <ul>
             <li><strong>Google / YouTube Data API</strong> — receives the channel name you search for;</li>
@@ -276,14 +290,14 @@
         </ul>
         <p>Generated reports are built entirely from public YouTube channel statistics and do not contain your email address or other contact details.</p>
 
-        <h3>6. Data retention</h3>
+        <h3>7. Data retention</h3>
         <p>
             We keep analysis records (channel name, email, report data) to operate the
             service and to avoid re-processing duplicate requests. You may request
             deletion at any time — see "Your rights" below.
         </p>
 
-        <h3>7. Your rights</h3>
+        <h3>8. Your rights</h3>
         <p>You can ask us to:</p>
         <ul>
             <li>Tell you what data we hold about your email address;</li>
@@ -292,19 +306,19 @@
         </ul>
         <p>To exercise any of these, email <a href="mailto:support@yessherlock.com">support@yessherlock.com</a>.</p>
 
-        <h3>8. Security</h3>
+        <h3>9. Security</h3>
         <p>
             We use industry-standard measures (encrypted connections, access-controlled
             hosting) to protect your data, but no system is 100% secure.
         </p>
 
-        <h3>9. Children's privacy</h3>
+        <h3>10. Children's privacy</h3>
         <p>TubeAnalyzer is not directed at children under 13, and we do not knowingly collect data from them.</p>
 
-        <h3>10. Changes to this policy</h3>
+        <h3>11. Changes to this policy</h3>
         <p>We may update this policy from time to time. Material changes will update the effective date above.</p>
 
-        <h3>11. Contact</h3>
+        <h3>12. Contact</h3>
         <p>Questions about these terms or your data: <a href="mailto:support@yessherlock.com">support@yessherlock.com</a>.</p>
     </section>
 </main>
@@ -316,5 +330,6 @@
     </div>
 </footer>
 
+<?php include __DIR__ . '/partials/cookie-notice.php'; ?>
 </body>
 </html>
