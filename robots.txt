@@ -11,5 +11,6 @@ Disallow: /db_test.php
 Disallow: /admin.php
 Disallow: /admin_prospects.php
 Disallow: /admin_seo.php
+Disallow: /admin_mailer.php
 
 Sitemap: https://yessherlock.com/sitemap.xml

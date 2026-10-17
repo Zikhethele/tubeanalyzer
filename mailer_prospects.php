@@ -20,10 +20,11 @@ require_once __DIR__ . '/config/Config.php';
 require_once __DIR__ . '/config/Database.php';
 require_once __DIR__ . '/mailer_common.php';
 
-define('CAMPAIGN', 'prospect');
-define('BATCH_SIZE', 25);
-define('TEMPLATE', __DIR__ . '/marketing/emails/prospect.html');
-define('SUBJECT', 'A free tool I built for checking YouTube channel stats');
+// Campaign name, batch size, template and subject live in mailer_common.php (PROSPECT_*),
+// shared with the admin_mailer.php preview.
+define('CAMPAIGN', PROSPECT_CAMPAIGN);
+define('TEMPLATE', PROSPECT_TEMPLATE);
+define('SUBJECT', PROSPECT_SUBJECT);
 
 try {
     $db = Database::getInstance()->getConnection();
@@ -34,18 +35,7 @@ try {
 
 ensureMailerTables($db);
 
-$stmt = $db->prepare("
-    SELECT LOWER(p.email) AS email, p.first_name, p.personal_reason
-    FROM   prospects p
-    WHERE  NOT EXISTS (
-               SELECT 1 FROM email_sends s
-               WHERE  s.campaign = :campaign AND s.email = LOWER(p.email) AND s.status = 'sent'
-           )
-    ORDER  BY p.created_at ASC
-    LIMIT  " . BATCH_SIZE
-);
-$stmt->execute([':campaign' => CAMPAIGN]);
-$candidates = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$candidates = prospectBatch($db);
 
 if (!$candidates) {
     echo "No prospects queued.\n";

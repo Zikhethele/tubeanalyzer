@@ -36,6 +36,32 @@ function ensureMailerTables(PDO $db): void {
     ");
 }
 
+// Prospect campaign settings, shared by mailer_prospects.php and the admin_mailer.php preview
+// so the preview always shows exactly what the next run will do.
+define('PROSPECT_CAMPAIGN', 'prospect');
+define('PROSPECT_BATCH_SIZE', 25);
+define('PROSPECT_TEMPLATE', __DIR__ . '/marketing/emails/prospect.html');
+define('PROSPECT_SUBJECT', 'A free tool I built for checking YouTube channel stats');
+
+/**
+ * The rows the next prospect run will consider, oldest first: everyone not yet sent to.
+ * Rows that are later skipped (unsubscribed, no personal_reason) still take a batch slot.
+ */
+function prospectBatch(PDO $db): array {
+    $stmt = $db->prepare("
+        SELECT LOWER(p.email) AS email, p.first_name, p.personal_reason, p.source, p.created_at
+        FROM   prospects p
+        WHERE  NOT EXISTS (
+                   SELECT 1 FROM email_sends s
+                   WHERE  s.campaign = :campaign AND s.email = LOWER(p.email) AND s.status = 'sent'
+               )
+        ORDER  BY p.created_at ASC
+        LIMIT  " . PROSPECT_BATCH_SIZE
+    );
+    $stmt->execute([':campaign' => PROSPECT_CAMPAIGN]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function isSuppressed(PDO $db, string $email): bool {
     $stmt = $db->prepare("SELECT 1 FROM email_suppressions WHERE email = :email");
     $stmt->execute([':email' => strtolower(trim($email))]);
