@@ -1,3 +1,10 @@
+<?php
+// /terms.php → /terms
+if (strtok($_SERVER['REQUEST_URI'] ?? '', '?') === '/terms.php') {
+    header('Location: /terms', true, 301);
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Use &amp; Privacy Policy — TubeAnalyzer</title>
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://yessherlock.com/terms.php">
+    <link rel="canonical" href="https://yessherlock.com/terms">
     <meta name="theme-color" content="#111111">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
 

@@ -1,0 +1,44 @@
+name: Sherlock Daily SEO Check
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  seo-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: curl, dom, mbstring, pdo, pdo_pgsql
+          ini-values: |
+            date.timezone=UTC
+
+      - name: Validate secrets
+        env:
+          DATABASE_URL:     ${{ secrets.DATABASE_URL }}
+          RESEND_API_KEY:   ${{ secrets.RESEND_API_KEY }}
+          SEO_REPORT_EMAIL: ${{ secrets.SEO_REPORT_EMAIL }}
+        run: |
+          for v in DATABASE_URL RESEND_API_KEY SEO_REPORT_EMAIL; do
+            if [ -z "${!v}" ]; then
+              echo "❌ $v is MISSING"
+              exit 1
+            fi
+          done
+          echo "✅ all secrets set"
+
+      - name: Run SEO checks
+        env:
+          DATABASE_URL:     ${{ secrets.DATABASE_URL }}
+          RESEND_API_KEY:   ${{ secrets.RESEND_API_KEY }}
+          SEO_REPORT_EMAIL: ${{ secrets.SEO_REPORT_EMAIL }}
+          PSI_API_KEY:      ${{ secrets.PSI_API_KEY }}
+        run: php seo_daily.php

@@ -32,7 +32,7 @@ if (file_exists($_envFile)) {
         }
     }
 }
-foreach (['RESEND_API_KEY', 'APP_SECRET', 'ADMIN_PASSWORD', 'INSTAGRAM_API_URL'] as $_key) {
+foreach (['RESEND_API_KEY', 'APP_SECRET', 'ADMIN_PASSWORD', 'INSTAGRAM_API_URL', 'SEO_REPORT_EMAIL'] as $_key) {
     if (!defined($_key)) define($_key, (string) getenv($_key));
 }
 
@@ -60,6 +60,9 @@ class Config {
 
     // Admin
     const ADMIN_PASSWORD = ADMIN_PASSWORD; // gates admin.php
+
+    // Daily SEO check (seo_daily.php) — where the report email goes
+    const SEO_REPORT_EMAIL = SEO_REPORT_EMAIL;
     
     // Rate Limiting
     const FREE_DAILY_LIMIT = 5;

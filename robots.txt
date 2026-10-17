@@ -2,11 +2,14 @@ User-agent: *
 Allow: /
 Disallow: /analyze.php
 Disallow: /register.php
+Disallow: /login.php
+Disallow: /logout.php
 Disallow: /instagram_audit.php
 Disallow: /migrate.php
 Disallow: /info.php
 Disallow: /db_test.php
 Disallow: /admin.php
 Disallow: /admin_prospects.php
+Disallow: /admin_seo.php
 
 Sitemap: https://yessherlock.com/sitemap.xml

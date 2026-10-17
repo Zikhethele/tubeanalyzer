@@ -6,45 +6,71 @@ ini_set('error_log', 'php://stderr');
 
 require_once __DIR__ . '/config/Config.php';
 require_once __DIR__ . '/config/Database.php';
+require_once __DIR__ . '/partials/helpers.php';
 
 // ── Slug ─────────────────────────────────────────────────────────────────────
 $rawSlug = trim($_GET['slug'] ?? '');
-if ($rawSlug === '') {
-    header('Location: /');
-    exit;
-}
-
-$slug = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '-', $rawSlug));
-$slug = trim($slug, '-');
+$slug    = channelSlug($rawSlug);
 
 if ($slug === '') {
     header('Location: /');
     exit;
 }
 
+// One URL per channel: /channel/MrBeast → /channel/mrbeast
+if ($rawSlug !== $slug) {
+    header('Location: /channel/' . $slug, true, 301);
+    exit;
+}
+
 // ── DB lookup ────────────────────────────────────────────────────────────────
+// Matches on the YouTube display name as well as what the visitor typed, and
+// prefers the display-name match so the canonical slug always resolves to itself.
 $channelData  = null;
 $channelInput = $rawSlug;
+$slugSql      = "TRIM(BOTH '-' FROM LOWER(REGEXP_REPLACE(%s, '[^a-zA-Z0-9]+', '-', 'g')))";
+$typedSlugSql = sprintf($slugSql, 'channel_name');
+$nameSlugSql  = sprintf($slugSql, "COALESCE(data::jsonb->>'channel_name', '')");
 
 try {
     $db   = Database::getInstance()->getConnection();
     $stmt = $db->prepare("
         SELECT data, channel_name
         FROM   analyses
-        WHERE  LOWER(REGEXP_REPLACE(channel_name, '[^a-zA-Z0-9]+', '-', 'g')) = :slug
-          AND  analyzed = 1
-        ORDER  BY created_at DESC
+        WHERE  analyzed = 1
+          AND  ({$typedSlugSql} = :slug OR {$nameSlugSql} = :slug2)
+        ORDER  BY ({$nameSlugSql} = :slug3) DESC, created_at DESC
         LIMIT  1
     ");
-    $stmt->execute([':slug' => $slug]);
+    $stmt->execute([':slug' => $slug, ':slug2' => $slug, ':slug3' => $slug]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($row) {
-        $channelData  = json_decode($row['data'], true) ?? null;
+        $channelData  = json_decode((string) $row['data'], true) ?? null;
         $channelInput = $row['channel_name'];
     }
 } catch (Exception $e) {
     // Degrade gracefully — DB unavailable
+    $dbFailed = true;
 }
+
+// A stored response with no stats (e.g. an API error body) is the same as no data
+if (!is_array($channelData) || (!isset($channelData['subscribers']) && empty($channelData['videos']))) {
+    $channelData = null;
+}
+
+if ($channelData) {
+    // Typed variants of the same channel collapse onto the display-name slug
+    $canonicalSlug = canonicalChannelSlug($channelData['channel_name'] ?? null, $channelInput);
+    if ($canonicalSlug !== '' && $canonicalSlug !== $slug) {
+        header('Location: /channel/' . $canonicalSlug, true, 301);
+        exit;
+    }
+} else {
+    // Nothing to show: a real 404 (503 if the DB is down) rather than a soft one
+    http_response_code(empty($dbFailed) ? 404 : 503);
+}
+
+$robots = channelIsIndexable($channelData) ? 'index, follow' : 'noindex, follow';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function fmtNum(string|int $n): string {
@@ -56,7 +82,9 @@ function fmtNum(string|int $n): string {
 }
 
 function engRate(array $v): float {
-    $views = max(1, (int) $v['views']);
+    $views = (int) $v['views'];
+    // No view count yet (premieres, hidden counts): a rate would be meaningless
+    if ($views <= 0) return 0.0;
     return round(((int) $v['likes'] + (int) $v['comments']) / $views * 100, 1);
 }
 
@@ -77,8 +105,9 @@ if (!empty($videos)) {
 }
 
 $avgEng = null;
-if (!empty($videos)) {
-    $avgEng = round(array_sum(array_map('engRate', $videos)) / count($videos), 1);
+$viewedVideos = array_filter($videos, fn($v) => (int) $v['views'] > 0);
+if (!empty($viewedVideos)) {
+    $avgEng = round(array_sum(array_map('engRate', $viewedVideos)) / count($viewedVideos), 1);
 }
 
 // ── Page meta ────────────────────────────────────────────────────────────────
@@ -143,7 +172,7 @@ foreach (array_slice($videos, 0, 5) as $v) {
     <title><?= e($pageTitle) ?></title>
 
     <meta name="description" content="<?= e($pageDesc) ?>">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="<?= $robots ?>">
     <link rel="canonical" href="<?= e($canonicalUrl) ?>">
     <meta name="theme-color" content="#111111">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">

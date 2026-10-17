@@ -6,3 +6,7 @@ analyze_log.txt
 *.sql
 *.log
 migrate.php
+
+# Scraper input/output contains personal data - keep it out of git
+scraper/*.csv
+scraper/*.txt

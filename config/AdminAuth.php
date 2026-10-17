@@ -110,13 +110,14 @@ function adminRenderLogin(string $error): void {
 <?php
 }
 
-/** Shared top nav for authenticated admin pages. $active is 'analyses' or 'prospects'. */
+/** Shared top nav for authenticated admin pages. $active is 'analyses', 'prospects' or 'seo'. */
 function adminNav(string $active): void {
     ?>
     <div class="top">
         <div class="admin-links">
             <a href="/admin.php" class="<?= $active === 'analyses' ? 'active' : '' ?>">Analyses</a>
             <a href="/admin_prospects.php" class="<?= $active === 'prospects' ? 'active' : '' ?>">Prospects</a>
+            <a href="/admin_seo.php" class="<?= $active === 'seo' ? 'active' : '' ?>">SEO</a>
         </div>
         <a href="?logout=1" class="signout">Sign out</a>
     </div>

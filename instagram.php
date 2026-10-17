@@ -256,7 +256,7 @@ if (!$currentUser) {
     <div class="footer-inner">
         <span>&copy; 2026 TubeAnalyzer</span>
         <span>
-            <a href="terms.php">Terms &amp; Privacy</a>
+            <a href="/terms">Terms &amp; Privacy</a>
             &middot;
             <a href="mailto:support@yessherlock.com">support@yessherlock.com</a>
         </span>

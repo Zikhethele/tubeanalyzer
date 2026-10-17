@@ -1,0 +1,5 @@
+# Generated report dumps: reachable by link, kept out of search indexes.
+# Not disallowed in robots.txt, or crawlers would never see this header.
+<IfModule mod_headers.c>
+    Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>

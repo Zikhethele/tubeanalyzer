@@ -71,7 +71,7 @@
 <div id="cookie-notice" role="region" aria-label="Cookie notice" hidden>
     <p>
         We use one necessary cookie to keep you signed in. No tracking or analytics cookies.
-        <a href="/terms.php#cookies">Learn more</a>
+        <a href="/terms#cookies">Learn more</a>
     </p>
     <button type="button" id="cookie-notice-dismiss">Got it</button>
 </div>

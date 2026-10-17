@@ -1,7 +1,16 @@
 <?php
 require_once __DIR__ . '/config/Auth.php';
-authStart();
-$currentUser = authCurrentUser();
+
+// /index.php is the same page as / — keep one URL
+if (strtok($_SERVER['REQUEST_URI'] ?? '/', '?') === '/index.php') {
+    $qs = $_SERVER['QUERY_STRING'] ?? '';
+    header('Location: /' . ($qs !== '' ? '?' . $qs : ''), true, 301);
+    exit;
+}
+
+// Only resume a session that already exists, so anonymous visitors and crawlers
+// get no session cookie and no "no-store" cache headers.
+$currentUser = isset($_COOKIE[session_name()]) ? authCurrentUser() : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,16 +20,14 @@ $currentUser = authCurrentUser();
     <title>TubeAnalyzer — Free YouTube Channel Analytics</title>
 
     <meta name="description" content="Analyze any YouTube channel for free. Get subscriber counts, view trends, engagement rates, and video performance — delivered as an interactive report to your inbox. No account needed.">
-    <meta name="keywords" content="youtube analytics, youtube channel analyzer, free youtube stats, channel analytics, youtube engagement rate, subscriber tracker, youtube insights tool">
-    <meta name="author" content="TubeAnalyzer">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://yessherlock.com">
+    <link rel="canonical" href="https://yessherlock.com/">
     <meta name="theme-color" content="#111111">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
 
     <meta property="og:title" content="TubeAnalyzer — Free YouTube Channel Analytics">
     <meta property="og:description" content="Get instant insights on any YouTube channel — subscribers, views, engagement rates, and growth trends, delivered to your inbox.">
-    <meta property="og:url" content="https://yessherlock.com">
+    <meta property="og:url" content="https://yessherlock.com/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="TubeAnalyzer">
 
@@ -576,7 +583,7 @@ $currentUser = authCurrentUser();
             <div class="consent-row">
                 <input type="checkbox" id="consent" name="consent" required>
                 <label for="consent">
-                    I agree to the <a href="terms.php" target="_blank">Terms of Use &amp; Privacy Policy</a>,
+                    I agree to the <a href="/terms" target="_blank">Terms of Use &amp; Privacy Policy</a>,
                     and understand TubeAnalyzer uses YouTube API Services to fetch public
                     channel data (<a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>).
                 </label>
@@ -601,7 +608,7 @@ $currentUser = authCurrentUser();
     <div class="footer-inner">
         <span>&copy; 2026 TubeAnalyzer</span>
         <span>
-            <a href="terms.php">Terms &amp; Privacy</a>
+            <a href="/terms">Terms &amp; Privacy</a>
             &middot;
             <a href="mailto:support@yessherlock.com">support@yessherlock.com</a>
         </span>
@@ -640,7 +647,7 @@ $currentUser = authCurrentUser();
             <div class="consent-row">
                 <input type="checkbox" id="reg-consent" name="consent" required>
                 <label for="reg-consent">
-                    I agree to the <a href="terms.php" target="_blank">Terms of Use &amp; Privacy Policy</a>,
+                    I agree to the <a href="/terms" target="_blank">Terms of Use &amp; Privacy Policy</a>,
                     and understand TubeAnalyzer uses YouTube API Services to fetch public
                     channel data (<a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>).
                 </label>
