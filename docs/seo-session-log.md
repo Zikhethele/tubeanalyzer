@@ -124,8 +124,66 @@ curl -sI https://yessherlock.com/channel/zzz-not-real | head -1               # 
 
 ## 7. Still to do
 
-- Commit and deploy Phase 1, then run the three checks above.
+- ~~Commit and deploy Phase 1, then run the three checks above.~~ Done
+  2026-10-17, see §8.
 - Verify the domain in Google Search Console and Bing Webmaster Tools (DNS TXT
   record at Namecheap) and submit `sitemap.xml`, so a baseline exists before
   content changes.
 - Phases 2–4 of the plan.
+
+## 8. Deploy — 2026-10-17
+
+Shipped Phase 1 together with the daily SEO tooling (`seo_daily.php`,
+`admin_seo.php`, `.github/workflows/seo-daily.yaml`, `.claude/agents/seo.md`).
+Every command run is listed in `docs/seo-deploy-commands-2026-10-17.md`.
+
+1. **Scope.** The owner chose to ship all the SEO work in one commit, because
+   the daily checks assume Phase 1 is live. Left out `tanal`, `scraper/` and a
+   stray plan file.
+2. **Pre-flight.** `php -l` was clean on all 11 changed PHP files. On `php -S`
+   with a router that mimics the rewrites, login to `/admin_seo.php` worked and
+   showed stored rows, and `/seo_daily.php` returned 403. `seo_daily.php` ran
+   against the local server; its only failure was the Apache-only `/reports/`
+   header.
+3. **Secret.** Set `SEO_REPORT_EMAIL` in GitHub Actions. `DATABASE_URL` and
+   `RESEND_API_KEY` already existed.
+4. **Commit.** The owner committed and pushed `a9bd8e0` to `main`, and Render
+   deployed it.
+5. **Live checks** (GET/HEAD only):
+
+   | URL | Result |
+   |---|---|
+   | `/` | 200, no `Set-Cookie` |
+   | `/terms` | 200 |
+   | `/terms.php` | 301 → `/terms` |
+   | `/index.php` | 301 → `/` |
+   | `/channel/zzz-not-real` | 404 |
+   | `/seo_daily.php` | 403 |
+   | `/admin_seo.php` | 200 (login form) |
+   | `/reports/engagement_trends.html` | `X-Robots-Tag: noindex, nofollow` |
+   | `/robots.txt` | disallows `/admin_seo.php` |
+
+   This also covers the three checks from §5 that couldn't run locally.
+6. **First workflow run.** Ran the workflow by hand
+   ([run 39057180966](https://github.com/Zikhethele/tubeanalyzer/actions/runs/39057180966)).
+   It succeeded, stored results in `seo_checks` and emailed the report.
+   20 checks: 1 failing, 2 warnings.
+   - **Fail, false alarm:** "/reports/ sends X-Robots-Tag". The script checked
+     `/reports/index.html`, but the root `.htaccess` denies every `index.html`.
+     Apache's `Header set` doesn't apply to a 403, so the header could never
+     appear there. Changed the check to use `/reports/engagement_trends.html`.
+     A rerun against production: 20 checks, 0 failing. **This fix is
+     uncommitted.**
+   - **Warn:** one sampled channel page has a title longer than 60 characters.
+     That belongs in Phase 2.
+   - **Warn:** max time to first byte was 1004 ms, just over the 1000 ms limit.
+     Probably a Render cold start; keep an eye on it.
+
+### Still to do after the deploy
+
+- Commit the `seo_daily.php` check fix.
+- Log into `/admin_seo.php` on production and confirm today's run shows (needs
+  `ADMIN_PASSWORD` set on Render).
+- Schedule the daily SEO agent routine for 06:30 UTC.
+- Optional: `PSI_API_KEY` secret (PageSpeed returns 429 without one) and a
+  Search Console service account (`GSC_SA_JSON`).

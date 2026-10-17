@@ -207,7 +207,8 @@ record('soft_404', 'Unknown channel returns 404 + noindex', $ok ? 'pass' : 'fail
     $fake['status'] . ' ' . ($fakePage['robots'] ?: 'no robots meta'),
     $ok ? '' : 'Unknown channel pages must not be indexable');
 
-$report = fetch($base . '/reports/index.html', true);
+// Not index.html: the root .htaccess denies every index.html, and a 403 carries no X-Robots-Tag.
+$report = fetch($base . '/reports/engagement_trends.html', true);
 $xRobots = strtolower((string) header1($report, 'x-robots-tag'));
 if ($report['status'] === 404) {
     record('reports_noindex', '/reports/ sends X-Robots-Tag: noindex', 'skip', '404', 'No report file to test');
