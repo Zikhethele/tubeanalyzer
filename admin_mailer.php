@@ -81,7 +81,7 @@ if ($previewRow) {
         $unsubUrl = unsubscribeUrl($previewRow['email']);
     } catch (RuntimeException $e) {
         $unsubUrl  = '#';
-        $unsubNote = 'APP_SECRET is not set on this server, so the preview has no unsubscribe link. The real email gets a signed one.';
+        $unsubNote = 'APP_SECRET is not set on this server, so unsubscribe links in sent emails will fail. Set it in Render to the same value as the GitHub secret.';
     }
     $previewHtml = renderTemplate(PROSPECT_TEMPLATE, [
         'first_name'      => $previewRow['first_name'] ?: 'there',
