@@ -55,7 +55,8 @@ $skipping  = count($plan) - count($sending);
 
 $unsent = (int) $db->query("
     SELECT COUNT(*) FROM prospects p
-    WHERE NOT EXISTS (
+    WHERE p.status = 'approved'
+      AND NOT EXISTS (
         SELECT 1 FROM email_sends s
         WHERE s.campaign = '" . PROSPECT_CAMPAIGN . "' AND s.email = LOWER(p.email) AND s.status = 'sent'
     )

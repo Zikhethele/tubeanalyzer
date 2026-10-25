@@ -34,6 +34,14 @@ function ensureMailerTables(PDO $db): void {
             created_at      TIMESTAMP NOT NULL DEFAULT NOW()
         )
     ");
+    // scraper/weekly.sh inserts rows as 'pending'; they only send once approved in
+    // admin_prospects.php. Existing and uploaded rows count as approved.
+    $db->exec("
+        ALTER TABLE prospects
+            ADD COLUMN IF NOT EXISTS status VARCHAR(20) NOT NULL DEFAULT 'approved'
+                CHECK (status IN ('pending', 'approved', 'rejected')),
+            ADD COLUMN IF NOT EXISTS review_note TEXT
+    ");
 }
 
 // Prospect campaign settings, shared by mailer_prospects.php and the admin_mailer.php preview
@@ -44,14 +52,15 @@ define('PROSPECT_TEMPLATE', __DIR__ . '/marketing/emails/prospect.html');
 define('PROSPECT_SUBJECT', 'A free tool I built for checking YouTube channel stats');
 
 /**
- * The rows the next prospect run will consider, oldest first: everyone not yet sent to.
+ * The rows the next prospect run will consider, oldest first: every approved prospect not yet sent to.
  * Rows that are later skipped (unsubscribed, no personal_reason) still take a batch slot.
  */
 function prospectBatch(PDO $db): array {
     $stmt = $db->prepare("
         SELECT LOWER(p.email) AS email, p.first_name, p.personal_reason, p.source, p.created_at
         FROM   prospects p
-        WHERE  NOT EXISTS (
+        WHERE  p.status = 'approved'
+          AND  NOT EXISTS (
                    SELECT 1 FROM email_sends s
                    WHERE  s.campaign = :campaign AND s.email = LOWER(p.email) AND s.status = 'sent'
                )

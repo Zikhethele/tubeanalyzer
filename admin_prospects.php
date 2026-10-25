@@ -14,6 +14,55 @@ adminRequireAuth();
 const MAX_CSV_BYTES = 5 * 1024 * 1024;
 const MAX_SKIPPED_SHOWN = 20;
 
+// Every form on this page changes data, so each carries a per-session token.
+if (empty($_SESSION['csrf'])) {
+    $_SESSION['csrf'] = bin2hex(random_bytes(16));
+}
+
+function csrfField(): string {
+    return '<input type="hidden" name="csrf" value="' . e($_SESSION['csrf']) . '">';
+}
+
+function csrfValid(): bool {
+    return hash_equals($_SESSION['csrf'], (string) ($_POST['csrf'] ?? ''));
+}
+
+/**
+ * Approves or rejects one pending prospect (rows inserted by scraper/weekly.sh).
+ * Approving saves the reviewed name and reason, and makes the row sendable.
+ * Rows that are no longer pending are left alone.
+ */
+function reviewProspect(PDO $db, array $post): string {
+    $id = (int) ($post['id'] ?? 0);
+    $action = (string) ($post['action'] ?? '');
+
+    if ($action === 'reject') {
+        $stmt = $db->prepare("UPDATE prospects SET status = 'rejected' WHERE id = :id AND status = 'pending' RETURNING email");
+        $stmt->execute([':id' => $id]);
+        $email = $stmt->fetchColumn();
+        return $email !== false ? "Rejected {$email}." : 'That prospect was already reviewed.';
+    }
+
+    if ($action === 'approve') {
+        $reason = trim((string) ($post['personal_reason'] ?? ''));
+        if ($reason === '') {
+            return 'Write a personal reason before approving.';
+        }
+        $firstName = trim((string) ($post['first_name'] ?? ''));
+        $stmt = $db->prepare("
+            UPDATE prospects
+            SET    status = 'approved', personal_reason = :reason, first_name = :first_name
+            WHERE  id = :id AND status = 'pending'
+            RETURNING email
+        ");
+        $stmt->execute([':id' => $id, ':reason' => $reason, ':first_name' => $firstName !== '' ? $firstName : null]);
+        $email = $stmt->fetchColumn();
+        return $email !== false ? "Approved {$email}. It goes out with the next mailer run." : 'That prospect was already reviewed.';
+    }
+
+    return 'Unknown action.';
+}
+
 /**
  * Parses an uploaded prospects CSV and upserts valid rows into `prospects`.
  * Expects a header row; only an `email` column is required, `first_name`,
@@ -59,13 +108,15 @@ function processProspectsCsv(array $file, PDO $db): array {
         return $summary;
     }
 
+    // An upload is a reviewed list, so its rows are approved, including any that were pending.
     $stmt = $db->prepare("
-        INSERT INTO prospects (email, first_name, personal_reason, source)
-        VALUES (:email, :first_name, :personal_reason, :source)
+        INSERT INTO prospects (email, first_name, personal_reason, source, status)
+        VALUES (:email, :first_name, :personal_reason, :source, 'approved')
         ON CONFLICT (email) DO UPDATE
         SET first_name      = EXCLUDED.first_name,
             personal_reason = EXCLUDED.personal_reason,
-            source          = EXCLUDED.source
+            source          = EXCLUDED.source,
+            status          = 'approved'
     ");
 
     $line = 1;
@@ -105,18 +156,36 @@ $db = Database::getInstance()->getConnection();
 ensureMailerTables($db);
 
 $result = null;
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !csrfValid()) {
+    $result = ['error' => 'Your session expired. Reload the page and try again.'];
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    // Post/redirect/get, so a reload doesn't resubmit the review.
+    $_SESSION['flash'] = reviewProspect($db, $_POST);
+    header('Location: ' . adminSelfUrl() . '#review');
+    exit;
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
     $result = processProspectsCsv($_FILES['csv_file'], $db);
 }
 
-$recent = $db->query(
-    "SELECT email, first_name, personal_reason, source, created_at
+$flash = $_SESSION['flash'] ?? null;
+unset($_SESSION['flash']);
+
+$pending = $db->query(
+    "SELECT id, email, first_name, personal_reason, source, review_note
      FROM prospects
+     WHERE status = 'pending'
+     ORDER BY created_at ASC, id ASC"
+)->fetchAll(PDO::FETCH_ASSOC);
+
+$recent = $db->query(
+    "SELECT email, first_name, personal_reason, source, status, created_at
+     FROM prospects
+     WHERE status <> 'pending'
      ORDER BY created_at DESC
      LIMIT 20"
 )->fetchAll(PDO::FETCH_ASSOC);
 
-$total = (int) $db->query("SELECT COUNT(*) FROM prospects")->fetchColumn();
+$approved = (int) $db->query("SELECT COUNT(*) FROM prospects WHERE status = 'approved'")->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -232,6 +301,33 @@ $total = (int) $db->query("SELECT COUNT(*) FROM prospects")->fetchColumn();
         color: var(--error);
     }
     .empty { color: var(--muted); font-size: 14px; padding: 32px 0; }
+
+    .review { display: flex; flex-direction: column; gap: 16px; }
+    .review-item { display: flex; flex-direction: column; gap: 12px; }
+    .review-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; }
+    .review-head .email { font-weight: 500; font-size: 14px; overflow-wrap: anywhere; }
+    .review-head a { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+    .review-head a:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .field label { font-size: 12px; color: var(--muted); }
+    .field input, .field textarea {
+        font: inherit;
+        font-size: 14px;
+        line-height: 1.5;
+        color: var(--black);
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--white);
+    }
+    .field input { max-width: 240px; min-height: 44px; }
+    .field textarea { resize: vertical; }
+    .field input:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--black); outline-offset: 1px; border-color: var(--black); }
+    .actions { display: flex; gap: 8px; }
+    button { min-height: 44px; }
+    button.secondary { background: var(--white); color: var(--black); border-color: var(--border); }
+    button.secondary:hover { background: var(--bg); border-color: var(--black); }
+    .status { font-size: 12px; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -239,7 +335,52 @@ $total = (int) $db->query("SELECT COUNT(*) FROM prospects")->fetchColumn();
         <?php adminNav('prospects'); ?>
 
         <h1>Prospects</h1>
-        <p class="sub"><?= $total ?> total in the campaign queue</p>
+        <p class="sub"><?= $approved ?> approved for the campaign · <?= count($pending) ?> waiting for review</p>
+
+        <?php if ($flash !== null): ?>
+            <div class="result ok" role="status"><?= e($flash) ?></div>
+        <?php endif; ?>
+
+        <h2 id="review">Waiting for review (<?= count($pending) ?>)</h2>
+        <?php if (empty($pending)): ?>
+            <p class="empty">Nothing waiting for review.</p>
+        <?php else: ?>
+            <p class="sub">
+                Drafted by the weekly run. Nothing here is emailed until you approve it.
+                Check the note, edit the reason if it needs it, or reject the row.
+            </p>
+            <div class="review">
+                <?php foreach ($pending as $row): $id = (int) $row['id']; ?>
+                    <form method="post" class="card review-item">
+                        <?= csrfField() ?>
+                        <input type="hidden" name="id" value="<?= $id ?>">
+                        <div class="review-head">
+                            <span class="email"><?= e((string) $row['email']) ?></span>
+                            <?php if (!empty($row['source']) && preg_match('#^https?://#i', (string) $row['source'])): ?>
+                                <a href="<?= e((string) $row['source']) ?>" target="_blank" rel="noopener noreferrer"><?= e((string) $row['source']) ?></a>
+                            <?php endif; ?>
+                            <?php if (!empty($row['review_note'])): ?>
+                                <span class="badge"><?= e((string) $row['review_note']) ?></span>
+                            <?php endif; ?>
+                        </div>
+                        <div class="field">
+                            <label for="name-<?= $id ?>">First name (optional)</label>
+                            <input id="name-<?= $id ?>" name="first_name" value="<?= e((string) ($row['first_name'] ?? '')) ?>" autocomplete="off">
+                        </div>
+                        <div class="field">
+                            <label for="reason-<?= $id ?>">Personal reason</label>
+                            <textarea id="reason-<?= $id ?>" name="personal_reason" rows="3"><?= e((string) ($row['personal_reason'] ?? '')) ?></textarea>
+                        </div>
+                        <div class="actions">
+                            <button type="submit" name="action" value="approve">Approve</button>
+                            <button type="submit" name="action" value="reject" class="secondary">Reject</button>
+                        </div>
+                    </form>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <h2>Upload a list</h2>
 
         <?php if ($result !== null): ?>
             <?php if ($result['error']): ?>
@@ -266,12 +407,13 @@ $total = (int) $db->query("SELECT COUNT(*) FROM prospects")->fetchColumn();
 
         <div class="card">
             <form method="post" enctype="multipart/form-data">
+                <?= csrfField() ?>
                 <div class="dropzone">
                     <input type="file" name="csv_file" accept=".csv" required>
                     <p class="hint">
                         Header row required. Columns: <code>email</code> (required),
                         <code>first_name</code>, <code>personal_reason</code>, <code>source</code> — all optional.
-                        Rows are matched on email; re-uploading updates existing prospects.
+                        Rows are matched on email; re-uploading updates existing prospects and approves them.
                     </p>
                 </div>
                 <button type="submit">Upload CSV</button>
@@ -283,7 +425,7 @@ $total = (int) $db->query("SELECT COUNT(*) FROM prospects")->fetchColumn();
             generic-feeling email — fill that column in before relying on the campaign to send.
         </p>
 
-        <h2>Recently added</h2>
+        <h2>Recently reviewed or uploaded</h2>
         <?php if (empty($recent)): ?>
             <p class="empty">No prospects yet.</p>
         <?php else: ?>
@@ -294,6 +436,7 @@ $total = (int) $db->query("SELECT COUNT(*) FROM prospects")->fetchColumn();
                         <th>Name</th>
                         <th>Reason</th>
                         <th>Source</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -309,6 +452,7 @@ $total = (int) $db->query("SELECT COUNT(*) FROM prospects")->fetchColumn();
                             <?php endif; ?>
                         </td>
                         <td><?= e((string) ($row['source'] ?? '—')) ?></td>
+                        <td class="status"><?= e((string) $row['status']) ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
